@@ -3,6 +3,8 @@ package com.synthclaw.flamingo
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.media.AudioAttributes
 import android.media.Ringtone
 import android.media.RingtoneManager
@@ -82,15 +84,12 @@ class MainActivity : FlutterActivity() {
         _mediaPlayer = null
     }
 
-    // ── Battery ─────────────────────────────────────────────────────
+    // ── Battery temperature (Intent-based, works on all API levels 21+) ──
     private fun getBatteryTemperatureC(): Double? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val bm = getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-            val tenths = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_TEMPERATURE)
-            tenths.takeIf { it != Int.MIN_VALUE }?.toDouble()?.let { it / 10.0 }
-        } else {
-            null
-        }
+        val intent = registerReceiver(null,
+            IntentFilter(Intent.ACTION_BATTERY_CHANGED)) ?: return null
+        val tenths = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, Int.MIN_VALUE)
+        return tenths.takeIf { it != Int.MIN_VALUE }?.toDouble()?.let { it / 10.0 }
     }
 
     override fun onDestroy() {
