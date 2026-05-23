@@ -2,6 +2,10 @@
 
 > **Swiss Army Knife** – 16 offline tools, one synthwave-pink Flutter app.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/synthalorian/flamingo/main/assets/app-icon-1024.png" alt="Flamingo App Icon — synthwave flamingo with sunglasses and a Swiss Army knife" width="256" height="256">
+</p>
+
 [![Flutter](https://img.shields.io/badge/Flutter-3.41.9-blue.svg)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.11.5-blueviolet.svg)](https://dart.dev)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
