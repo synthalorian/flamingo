@@ -1,6 +1,6 @@
 # 🎹🦞 Flamingo
 
-> **Swiss Army Knife** – 18 offline tools, one synthwave-pink Flutter app.
+> **Swiss Army Knife** – 16 offline tools, one synthwave-pink Flutter app.
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.41.9-blue.svg)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.11.5-blueviolet.svg)](https://dart.dev)
@@ -36,11 +36,8 @@ Every screen wears a consistent **synthwave CRT aesthetic** — hot-pink neon, c
 | 13 | 🔑 **Password Gen** | 3 | Crypto RNG | Secure passwords with entropy meter and clipboard |
 | 14 | 🌡️ **Thermometer** | 3 | — | Animated analog dial with simulated temperature drift |
 | 15 | 📏 **Ruler** | 3 | — | Calibrated on-screen ruler (cm / in) |
-| 16 | 🔄 **Unit Converter** | 3 | — | Length, weight, temperature, volume with swap button |
-| 17 | 🌡️ **Thermometer** *(alt sensor)* | 3 | Battery thermal | Temperature via battery health telemetry |
-| 18 | 🔍 **Magnifier** | 3 | — | Screen magnifier tool |
+|| 16 | 🔄 **Unit Converter** | 3 | — | Length, weight, temperature, volume with swap button |
 
----
 
 ## UI Preview
 
@@ -217,7 +214,7 @@ To verify: grep the repo for `http://`, `https://`, `socket`, or any external ho
 
 ## Roadmap
 
-- [x] 18 tools implemented (12 from original plan + 6 post-launch)
+|- [x] 16 tools implemented
 - [x] All tools compile cleanly (`flutter analyze` → exit 0)
 - [x] CRT scanline background everywhere
 - [x] Sensor modernisation (non-deprecated `sensors_plus` streams)

@@ -18,6 +18,8 @@ import '../../features/password_gen/password_gen_screen.dart';
 import '../../features/thermometer/thermometer_screen.dart';
 import '../../features/ruler/ruler_screen.dart';
 import '../../features/unit_converter/unit_converter_screen.dart';
+import '../../features/battery_thermometer/battery_thermometer_screen.dart';
+import '../../features/magnifier/magnifier_screen.dart';
 import '../../features/home/home_screen.dart';
 
 /// Central router configuration for the Flamingo app.
@@ -76,6 +78,10 @@ class AppRouter {
                     return const RulerScreen();
                   case 'unitConverter':
                     return const UnitConverterScreen();
+                  case 'batteryThermometer':
+                    return const BatteryThermometerScreen();
+                  case 'magnifier':
+                    return const MagnifierScreen();
                   default:
                     return Scaffold(
                       backgroundColor: FlamingoColors.card,
