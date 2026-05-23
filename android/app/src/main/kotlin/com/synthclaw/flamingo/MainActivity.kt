@@ -8,6 +8,7 @@ import android.media.Ringtone
 import android.media.RingtoneManager
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.BatteryManager
 import android.os.Build
 import android.provider.Settings
 import io.flutter.embedding.android.FlutterActivity
