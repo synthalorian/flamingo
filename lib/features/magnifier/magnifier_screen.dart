@@ -74,6 +74,12 @@ class _MagnifierScreenState extends State<MagnifierScreen> {
     setState(() => _torchOn = on);
   }
 
+  void _handlePinch(ScaleUpdateDetails details) {
+    final newZoom = (_zoom * details.scale).clamp(1.0, 8.0);
+    setState(() => _zoom = newZoom);
+    _ctrl?.setZoomLevel(_zoom);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,8 +120,12 @@ class _MagnifierScreenState extends State<MagnifierScreen> {
                   )
                 : Stack(
                     children: [
-                      // Full camera feed
-                      Center(child: CameraPreview(_ctrl!)),
+                      // Pinch-to-zoom gesture detector over camera feed
+                      GestureDetector(
+                        onScaleUpdate: _handlePinch,
+                        onScaleEnd: (_) => setState(() {}),
+                        child: CameraPreview(_ctrl!),
+                      ),
                       // Zoom label percentage
                       Positioned(
                         top: 8,
@@ -138,16 +148,17 @@ class _MagnifierScreenState extends State<MagnifierScreen> {
                           ),
                         ),
                       ),
-                      // Pinch-zoom indicator
-                      Positioned(
-                        bottom: 100,
-                        right: 16,
-                        child: Text('Pinch to zoom',
-                            style: TextStyle(
-                                color: FlamingoColors.muted
-                                    .withValues(alpha: 0.6),
-                                fontSize: 11)),
-                      ),
+                      // Pinch hint — only show when not pinching
+                      if (_zoom == 1.0)
+                        Positioned(
+                          bottom: 100,
+                          right: 16,
+                          child: Text('Pinch to zoom',
+                              style: TextStyle(
+                                  color: FlamingoColors.muted
+                                      .withValues(alpha: 0.6),
+                                  fontSize: 11)),
+                        ),
                     ],
                   ),
       ),
@@ -179,7 +190,7 @@ class _MagnifierScreenState extends State<MagnifierScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text('Tap to change magnification',
+                  Text('Pinch or tap to change magnification',
                       style: TextStyle(
                           color: FlamingoColors.muted.withValues(alpha: 0.6),
                           fontSize: 11)),

@@ -131,6 +131,7 @@ class _TimerScreenState extends State<TimerScreen> {
     return '$m:$s';
   }
 
+  @override
   void dispose() {
     _timer?.cancel();
     super.dispose();

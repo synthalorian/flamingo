@@ -68,10 +68,11 @@ class _CalculatorController {
     final nums = _expression.split(RegExp(r'(?<=[\d)])[+-\×÷]|[-\×÷](?=[\d(])'));
     if (nums.isNotEmpty) {
       final last = nums.last;
+      final prefix = _expression.substring(0, _expression.length - last.length);
       if (last.startsWith('-')) {
-        _expression = _expression.substring(0, _expression.length - last.length) + last.substring(1);
+        _expression = prefix + last.substring(1);
       } else {
-        _expression = _expression.substring(0, _expression.length - last.length) + '-$last';
+        _expression = prefix + '-$last';
       }
     }
   }
@@ -140,13 +141,19 @@ class _CalculatorController {
       } else if (t == '(') {
         ops.add(t);
       } else if (t == ')') {
-        while (ops.isNotEmpty && ops.last != '(') output.add(ops.removeLast());
-        if (ops.isNotEmpty && ops.last == '(') ops.removeLast();
+        while (ops.isNotEmpty && ops.last != '(') {
+          output.add(ops.removeLast());
+        }
+        if (ops.isNotEmpty && ops.last == '(') {
+          ops.removeLast();
+        }
       } else {
         output.add(t);
       }
     }
-    while (ops.isNotEmpty) output.add(ops.removeLast());
+    while (ops.isNotEmpty) {
+      output.add(ops.removeLast());
+    }
     return output;
   }
 
@@ -267,14 +274,23 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   void _onTap(String label, String? op) {
     HapticFeedback.lightImpact();
-    if (label == 'C') controller._clear();
-    else if (label == '±') controller._toggleSign();
-    else if (label == '%') controller._percent();
-    else if (label == '⌫') controller._backspace();
-    else if (label == '=') controller._calculate();
-    else if (op != null) controller._inputOperator(op);
-    else if (label == '.') controller._inputDecimal();
-    else controller._inputDigit(label);
+    if (label == 'C') {
+      controller._clear();
+    } else if (label == '±') {
+      controller._toggleSign();
+    } else if (label == '%') {
+      controller._percent();
+    } else if (label == '⌫') {
+      controller._backspace();
+    } else if (label == '=') {
+      controller._calculate();
+    } else if (op != null) {
+      controller._inputOperator(op);
+    } else if (label == '.') {
+      controller._inputDecimal();
+    } else {
+      controller._inputDigit(label);
+    }
     setState(() {});
   }
 
