@@ -145,6 +145,23 @@ class AppConstants {
       icon: Icons.auto_fix_high,
       accentColor: const Color(0xFFB026FF),
     ),
+    // ── Tier 3 – new features ──────────────────────────────────────
+    ToolItem(
+      id: 'batteryThermometer',
+      title: 'Battery Thermometer',
+      description: 'Battery temperature reading',
+      routePath: '/tool/batteryThermometer',
+      icon: Icons.battery_charging_full,
+      accentColor: const Color(0xFFFFD700),
+    ),
+    ToolItem(
+      id: 'magnifier',
+      title: 'Magnifier',
+      description: 'Camera-based magnifying glass',
+      routePath: '/tool/magnifier',
+      icon: Icons.search,
+      accentColor: const Color(0xFF00D4FF),
+    ),
   ];
 
   /// Icon data for each tool id (used by home screen).
@@ -182,6 +199,10 @@ class AppConstants {
         return Icons.straighten;
       case 'unitConverter':
         return Icons.auto_fix_high;
+      case 'batteryThermometer':
+        return Icons.battery_charging_full;
+      case 'magnifier':
+        return Icons.search;
       default:
         return Icons.apps;
     }

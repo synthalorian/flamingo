@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 
 import '../../core/theme/flamingo_theme.dart';
 import '../../core/widgets/crt_background.dart';
 
-/// Preset durations in minutes.
 const List<int> kPresets = [1, 2, 5, 10, 15, 30];
+
+enum TimerSound { none, notification, alarm }
+
+const String _timerSoundChannel = 'timer_sound_player';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
@@ -23,8 +27,9 @@ class _TimerScreenState extends State<TimerScreen> {
   bool _running = false;
   bool _finished = false;
   Timer? _timer;
+  TimerSound _sound = TimerSound.notification;
 
-  // ── Actions ────────────────────────────────────────────────
+  // ── Actions ───────────────────────────────────────────────────────────
 
   void _start() {
     if (_running || _remaining.inSeconds <= 0) return;
@@ -53,25 +58,42 @@ class _TimerScreenState extends State<TimerScreen> {
     });
   }
 
-  void _onComplete() {
+  Future<void> _onComplete() async {
     setState(() {
       _running = false;
       _finished = true;
     });
     Vibration.vibrate(pattern: [0, 100, 50, 100, 50, 300]);
+
+    // Play sound via platform channel
+    try {
+      if (_sound == TimerSound.notification) {
+        await const MethodChannel(_timerSoundChannel)
+            .invokeMethod<void>('playNotif');
+      } else if (_sound == TimerSound.alarm) {
+        await const MethodChannel(_timerSoundChannel)
+            .invokeMethod<void>('playAlarm');
+      }
+    } catch (_) {
+      // sound channel missing → vibration only (graceful degrade)
+    }
+
     _showDoneDialog();
   }
 
   void _showDoneDialog() {
     showDialog(
-      context: context,
+      useRootNavigator: false,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
+      context: context,
+      builder: (_) => AlertDialog(
         backgroundColor: FlamingoColors.card,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Timer Done!',
             style: TextStyle(color: FlamingoColors.primary)),
-        content:
-            const Text("Time's up.", style: TextStyle(color: FlamingoColors.text)),
+        content: const Text("Time's up.",
+            style: TextStyle(color: FlamingoColors.text)),
         actions: [
           TextButton(
             onPressed: () {
@@ -99,19 +121,20 @@ class _TimerScreenState extends State<TimerScreen> {
     });
   }
 
+  void _onSoundChanged(TimerSound newSound) {
+    setState(() => _sound = newSound);
+  }
+
   String _format(Duration d) {
     final m = d.inMinutes.toString().padLeft(2, '0');
     final s = (d.inSeconds % 60).toString().padLeft(2, '0');
     return '$m:$s';
   }
 
-  @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
   }
-
-  // ── Build ──────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -125,15 +148,13 @@ class _TimerScreenState extends State<TimerScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 24),
-              // Preset chips
+              // ── Preset chips ──
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   children: kPresets.map((m) {
-                    final active =
-                        _total.inMinutes == m && !_running;
+                    final active = _total.inMinutes == m && !_running;
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: _presetChip(m, active),
@@ -141,9 +162,29 @@ class _TimerScreenState extends State<TimerScreen> {
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 32),
 
-              // Circular countdown
+              // ── Sound picker ──
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Sound:',
+                        style: TextStyle(
+                            color: FlamingoColors.muted, fontSize: 11)),
+                    const SizedBox(width: 10),
+                    _soundChip('None', TimerSound.none, _sound),
+                    const SizedBox(width: 6),
+                    _soundChip('Notif', TimerSound.notification, _sound),
+                    const SizedBox(width: 6),
+                    _soundChip('Alarm', TimerSound.alarm, _sound),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // ── Circular countdown ──
               Expanded(
                 flex: 3,
                 child: Center(
@@ -151,9 +192,7 @@ class _TimerScreenState extends State<TimerScreen> {
                     width: 250,
                     height: 250,
                     child: CustomPaint(
-                      painter: _TimerCirclePainter(
-                        fraction: fraction,
-                      ),
+                      painter: _TimerCirclePainter(fraction: fraction),
                       child: Center(
                         child: Text(
                           _format(_remaining),
@@ -170,9 +209,10 @@ class _TimerScreenState extends State<TimerScreen> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 16),
 
-              // Controls
+              // ── Controls ──
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -198,7 +238,7 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-  // ── Sub-widgets ────────────────────────────────────────────
+  // ── Sub-widgets ────────────────────────────────────────────────────────
 
   Widget _presetChip(int minutes, bool active) {
     return Material(
@@ -211,13 +251,40 @@ class _TimerScreenState extends State<TimerScreen> {
         borderRadius: BorderRadius.circular(20),
         onTap: () => _setDuration(minutes),
         child: Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text('$minutes min',
-              style: TextStyle(
-                  color:
-                      active ? FlamingoColors.primary : FlamingoColors.muted,
-                  fontSize: 13)),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Text(
+            '$minutes min',
+            style: TextStyle(
+              color: active ? FlamingoColors.primary : FlamingoColors.muted,
+              fontSize: 13,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _soundChip(String label, TimerSound value, TimerSound current) {
+    final active = _sound == value;
+    return Material(
+      color: active
+          ? FlamingoColors.accent.withValues(alpha: 0.2)
+          : FlamingoColors.card,
+      surfaceTintColor: Colors.transparent,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () => _onSoundChanged(value),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: active ? FlamingoColors.accent : FlamingoColors.muted,
+              fontSize: 11,
+              fontWeight: active ? FontWeight.w600 : FontWeight.normal,
+            ),
+          ),
         ),
       ),
     );
@@ -232,24 +299,25 @@ class _TimerScreenState extends State<TimerScreen> {
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-          child: Text(label,
-              style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 2)),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 2,
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-// ── Circular progress painter ──────────────────────────────
+// ── Circular progress painter ─────────────────────────────────────────────
 
 class _TimerCirclePainter extends CustomPainter {
   final double fraction;
-
   _TimerCirclePainter({required this.fraction});
 
   @override
@@ -305,6 +373,5 @@ class _TimerCirclePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _TimerCirclePainter old) =>
-      old.fraction != fraction;
+  bool shouldRepaint(covariant _TimerCirclePainter old) => old.fraction != fraction;
 }
