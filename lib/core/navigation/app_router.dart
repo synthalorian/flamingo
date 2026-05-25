@@ -37,7 +37,7 @@ class AppRouter {
       initialLocation: '/',
       routes: [
         GoRoute(
-          path: 'settings',
+          path: '/settings',
           name: 'settings',
           builder: (context, state) => const SettingsScreen(),
         ),
