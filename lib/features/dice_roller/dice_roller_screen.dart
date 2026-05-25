@@ -149,7 +149,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
   int _setB_count = 2;
   int _setB_sides = 6;
   bool _rolling = false;
-  bool _dualMode = true;
+  bool _dualMode = false;
 
   // Results for each set
   List<int> _resultsA = [];
