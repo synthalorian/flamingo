@@ -237,7 +237,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
                   fontWeight: FontWeight.w600,
                 )),
             const SizedBox(height: 4),
-            Text('d$sides · $count dice',
+            Text('d$sides · ${count == 1 ? "1 die" : "$count dice"}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: FlamingoColors.muted,
@@ -313,23 +313,45 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
               }).toList(),
             ),
             const SizedBox(height: 8),
-            // Count slider
-            Slider(
-              value: label == 'A' ? _setA_count.toDouble() : _setB_count.toDouble(),
-              min: 1,
-              max: 6,
-              divisions: 5,
-              activeColor: FlamingoColors.primary,
-              inactiveColor: FlamingoColors.card,
-              onChanged: (v) {
-                setState(() {
-                  if (label == 'A') {
-                    _setA_count = v.round();
-                  } else {
-                    _setB_count = v.round();
-                  }
-                });
-              },
+            // Count selector — quick chips
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 4,
+              runSpacing: 4,
+              children: List.generate(6, (i) {
+                final c = i + 1;
+                final isActive = (label == 'A' ? _setA_count : _setB_count) == c;
+                return Material(
+                  color: isActive
+                      ? FlamingoColors.primary.withValues(alpha: 0.2)
+                      : FlamingoColors.card,
+                  borderRadius: BorderRadius.circular(20),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: () {
+                      setState(() {
+                        if (label == 'A') {
+                          _setA_count = c;
+                        } else {
+                          _setB_count = c;
+                        }
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      child: Text(
+                        '×$c',
+                        style: TextStyle(
+                          color: isActive ? FlamingoColors.primary : FlamingoColors.muted,
+                          fontSize: 11,
+                          fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ),
           ],
         ),
