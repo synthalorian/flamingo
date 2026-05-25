@@ -189,6 +189,33 @@ class AppConstants {
       icon: Icons.timer_rounded,
       accentColor: const Color(0xFFE53935),
     ),
+    // ── Tier 5 – New: Ambient Sounds ──────────────────────────────────
+    ToolItem(
+      id: 'ambientSounds',
+      title: 'Ambient Sounds',
+      description: 'White noise, rain, ocean, forest',
+      routePath: '/tool/ambientSounds',
+      icon: Icons.headphones,
+      accentColor: const Color(0xFF64B5F6),
+    ),
+    // ── Tier 5 – New: Drawing Board ────────────────────────────────────
+    ToolItem(
+      id: 'drawingBoard',
+      title: 'Drawing Board',
+      description: 'Freehand canvas with colors',
+      routePath: '/tool/drawingBoard',
+      icon: Icons.palette,
+      accentColor: const Color(0xFFFF8A65),
+    ),
+    // ── Tier 5 – New: Guitar Tuner ─────────────────────────────────────
+    ToolItem(
+      id: 'guitarTuner',
+      title: 'Guitar Tuner',
+      description: 'Guitar & bass chromatic tuner',
+      routePath: '/tool/guitarTuner',
+      icon: Icons.music_note_outlined,
+      accentColor: const Color(0xFFCE93D8),
+    ),
   ];
 
   /// Icon data for each tool id (used by home screen).
@@ -236,6 +263,12 @@ class AppConstants {
         return Icons.directions_walk;
       case 'pomodoro':
         return Icons.timer_rounded;
+      case 'ambientSounds':
+        return Icons.headphones;
+      case 'drawingBoard':
+        return Icons.palette;
+      case 'guitarTuner':
+        return Icons.music_note_outlined;
       default:
         return Icons.apps;
     }
