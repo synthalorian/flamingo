@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../theme/flamingo_theme.dart';
+import '../../features/settings/settings_screen.dart';
 import '../../features/flashlight/flashlight_screen.dart';
 import '../../features/calculator/calculator_screen.dart';
 import '../../features/stopwatch/stopwatch_screen.dart';
@@ -35,6 +36,11 @@ class AppRouter {
       navigatorKey: navigatorKey,
       initialLocation: '/',
       routes: [
+        GoRoute(
+          path: 'settings',
+          name: 'settings',
+          builder: (context, state) => const SettingsScreen(),
+        ),
         GoRoute(
           path: '/',
           name: 'home',

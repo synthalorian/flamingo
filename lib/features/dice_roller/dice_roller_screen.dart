@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,132 @@ import '../../core/theme/flamingo_theme.dart';
 import '../../core/widgets/crt_background.dart';
 
 const List<int> _allSides = [4, 6, 8, 10, 12, 20];
+
+/// Animated die face that shows a rolling animation with a final result.
+class _AnimatedDie extends StatefulWidget {
+  final int sides;
+  final int result;
+  final bool rolling;
+  final double size;
+
+  const _AnimatedDie({
+    required this.sides,
+    required this.result,
+    required this.rolling,
+    required this.size,
+  });
+
+  @override
+  State<_AnimatedDie> createState() => _AnimatedDieState();
+}
+
+class _AnimatedDieState extends State<_AnimatedDie>
+    with TickerProviderStateMixin {
+  late AnimationController _rollController;
+  late Animation<double> _rollAnim;
+  int _displayValue = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _rollController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _rollAnim = CurvedAnimation(
+      parent: _rollController,
+      curve: Curves.elasticOut,
+    );
+    _displayValue = widget.result;
+    if (widget.rolling) {
+      _rollController.forward();
+      _animateDice();
+    }
+  }
+
+  void _animateDice() {
+    if (!widget.rolling) return;
+    // Rapid-fire random numbers during roll
+    int tick = 0;
+    Timer.periodic(const Duration(milliseconds: 40), (t) {
+      if (!widget.rolling || tick >= 14) {
+        t.cancel();
+        if (!mounted) return;
+        setState(() {
+          _displayValue = widget.result;
+        });
+        return;
+      }
+      if (!mounted) return;
+      setState(() {
+        _displayValue = math.Random.secure().nextInt(widget.sides) + 1;
+      });
+      tick++;
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant _AnimatedDie oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.rolling != oldWidget.rolling) {
+      if (widget.rolling) {
+        _rollController.forward();
+        _animateDice();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _rollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _rollAnim,
+      builder: (context, child) {
+        final scale = _rollAnim.value;
+        final rotation = _rollAnim.value * math.pi * 2;
+
+        return Transform.scale(
+          scale: 0.8 + scale * 0.2,
+          child: Transform.rotate(
+            angle: rotation,
+            child: Container(
+              width: widget.size,
+              height: widget.size,
+              margin: EdgeInsets.all(widget.size * 0.08),
+              decoration: BoxDecoration(
+                color: FlamingoColors.surface,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: FlamingoColors.primary, width: 1.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: FlamingoColors.primary.withValues(alpha: 0.2 * scale),
+                    blurRadius: 6 * scale,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  '$_displayValue',
+                  style: TextStyle(
+                    color: FlamingoColors.primary,
+                    fontSize: widget.size * 0.42,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
 
 class DiceRollerScreen extends StatefulWidget {
   const DiceRollerScreen({super.key});
@@ -23,48 +150,25 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
   int _setB_sides = 6;
   bool _rolling = false;
 
+  // Results for each set
+  List<int> _resultsA = [];
+  List<int> _resultsB = [];
+
   void _roll() {
     setState(() => _rolling = true);
     Vibration.vibrate(duration: 100);
-    // Small delay so the user sees the "rolling" state
-    Future.delayed(const Duration(milliseconds: 200), () {
+
+    // Generate all results upfront
+    _resultsA = List.generate(_setA_count, (_) => _rng.nextInt(_setA_sides) + 1);
+    _resultsB = List.generate(_setB_count, (_) => _rng.nextInt(_setB_sides) + 1);
+
+    // Duration scales with total dice count for satisfying roll
+    final duration = (100 + _setA_count * 30 + _setB_count * 30).clamp(200, 800);
+
+    Future.delayed(Duration(milliseconds: duration), () {
       if (!mounted) return;
       setState(() => _rolling = false);
     });
-  }
-
-  List<int> _results(int count, int sides) {
-    return List.generate(count, (_) => _rng.nextInt(sides) + 1);
-  }
-
-  Widget _dieBlock(int value, {double size = 52}) {
-    return Container(
-      width: size,
-      height: size,
-      margin: EdgeInsets.all(size * 0.08),
-      decoration: BoxDecoration(
-        color: FlamingoColors.surface,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: FlamingoColors.primary, width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: FlamingoColors.primary.withValues(alpha: 0.15),
-            blurRadius: 6,
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          '$value',
-          style: TextStyle(
-            color: FlamingoColors.primary,
-            fontSize: size * 0.42,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'monospace',
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _diceSet({
@@ -73,7 +177,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
   }) {
     final count = label == 'A' ? _setA_count : _setB_count;
     final sides = label == 'A' ? _setA_sides : _setB_sides;
-    final results = _rolling ? _results(count, sides) : <int>[];
+    final results = label == 'A' ? _resultsA : _resultsB;
 
     return Expanded(
       child: Container(
@@ -104,19 +208,42 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
             const SizedBox(height: 4),
             Text('d$sides · $count dice',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: FlamingoColors.muted,
                   fontSize: 11,
                 )),
             const SizedBox(height: 8),
+            // Dice display
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 4,
               runSpacing: 4,
-              children: _rolling || results.isEmpty
-                  ? [const Text('—', style: TextStyle(color: FlamingoColors.muted))]
-                  : List.generate(results.length, (i) => _dieBlock(results[i])),
+              children: results.isEmpty || _rolling
+                  ? [Text('—', style: TextStyle(color: FlamingoColors.muted))]
+                  : List.generate(results.length, (i) {
+                      return _AnimatedDie(
+                        sides: sides,
+                        result: results[i],
+                        rolling: _rolling,
+                        size: 52,
+                      );
+                    }),
             ),
+            // Total line
+            if (results.isNotEmpty && !_rolling)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  'Total: ${results.fold<int>(0, (a, b) => a + b)}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: FlamingoColors.accent,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ),
             const SizedBox(height: 8),
             // Sides selector
             Wrap(
@@ -155,6 +282,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
               }).toList(),
             ),
             const SizedBox(height: 8),
+            // Count slider
             Slider(
               value: label == 'A' ? _setA_count.toDouble() : _setB_count.toDouble(),
               min: 1,
@@ -185,7 +313,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
       appBar: AppBar(
         backgroundColor: FlamingoColors.scaffoldBg,
         elevation: 0,
-        title: const Text('DICE ROLLER',
+        title: Text('DICE ROLLER',
             style: TextStyle(
                 color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
         centerTitle: true,
@@ -214,7 +342,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
                   _rolling
                       ? 'ROLLING...'
                       : 'Tap ROLL (+equal sides plays both)',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: FlamingoColors.muted,
                     fontSize: 11,
                     letterSpacing: 1,
@@ -236,8 +364,10 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
                           } else {
                             setState(() => _rolling = true);
                             Vibration.vibrate(duration: 100);
-                            Future.delayed(
-                                const Duration(milliseconds: 200), () {
+                            _resultsA = List.generate(_setA_count, (_) => _rng.nextInt(_setA_sides) + 1);
+                            _resultsB = List.generate(_setB_count, (_) => _rng.nextInt(_setB_sides) + 1);
+                            final duration = (100 + _setA_count * 30 + _setB_count * 30).clamp(200, 800);
+                            Future.delayed(Duration(milliseconds: duration), () {
                               if (!mounted) return;
                               setState(() => _rolling = false);
                             });

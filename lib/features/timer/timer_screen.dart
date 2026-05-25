@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:flutter/services.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 
@@ -11,8 +11,6 @@ import '../../core/widgets/crt_background.dart';
 const List<int> kPresets = [1, 2, 5, 10, 15, 30];
 
 enum TimerSound { none, notification, alarm }
-
-const String _timerSoundChannel = 'timer_sound_player';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
@@ -28,6 +26,7 @@ class _TimerScreenState extends State<TimerScreen> {
   bool _finished = false;
   Timer? _timer;
   TimerSound _sound = TimerSound.notification;
+  final AudioPlayer _player = AudioPlayer();
 
   // ── Actions ───────────────────────────────────────────────────────────
 
@@ -65,17 +64,13 @@ class _TimerScreenState extends State<TimerScreen> {
     });
     Vibration.vibrate(pattern: [0, 100, 50, 100, 50, 300]);
 
-    // Play sound via platform channel
+    // Play sound via audioplayers
     try {
-      if (_sound == TimerSound.notification) {
-        await const MethodChannel(_timerSoundChannel)
-            .invokeMethod<void>('playNotif');
-      } else if (_sound == TimerSound.alarm) {
-        await const MethodChannel(_timerSoundChannel)
-            .invokeMethod<void>('playAlarm');
+      if (_sound != TimerSound.none) {
+        await _player.play(AssetSource('sounds/click.wav'));
       }
     } catch (_) {
-      // sound channel missing → vibration only (graceful degrade)
+      // audio file missing → vibration only (graceful degrade)
     }
 
     _showDoneDialog();
@@ -90,9 +85,9 @@ class _TimerScreenState extends State<TimerScreen> {
         backgroundColor: FlamingoColors.card,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Timer Done!',
+        title: Text('Timer Done!',
             style: TextStyle(color: FlamingoColors.primary)),
-        content: const Text("Time's up.",
+        content: Text("Time's up.",
             style: TextStyle(color: FlamingoColors.text)),
         actions: [
           TextButton(
@@ -103,7 +98,7 @@ class _TimerScreenState extends State<TimerScreen> {
                 _finished = false;
               });
             },
-            child: const Text('OK',
+            child: Text('OK',
                 style: TextStyle(color: FlamingoColors.neonBlue)),
           ),
         ],
@@ -134,6 +129,7 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    _player.dispose();
     super.dispose();
   }
 
@@ -170,7 +166,7 @@ class _TimerScreenState extends State<TimerScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Sound:',
+                    Text('Sound:',
                         style: TextStyle(
                             color: FlamingoColors.muted, fontSize: 11)),
                     const SizedBox(width: 10),
@@ -197,7 +193,7 @@ class _TimerScreenState extends State<TimerScreen> {
                       child: Center(
                         child: Text(
                           _format(_remaining),
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: FlamingoColors.text,
                             fontSize: 48,
                             fontWeight: FontWeight.w300,

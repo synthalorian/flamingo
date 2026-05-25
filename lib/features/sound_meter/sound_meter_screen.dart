@@ -17,11 +17,9 @@ class _SoundMeterScreenState extends State<SoundMeterScreen> {
   bool _recording = false;
   double _volume = 0; // 0–1
   Timer? _tick;
+  double _phase = 0;
 
-  // Fake volume simulation since record API is complex
-  // In production you'd wire up AudioRecorder properly
-  int _lastVolume = 0;
-
+  // More realistic simulation: sine + noise gives natural-looking amplitude
   Future<void> _startRecord() async {
     final mic = await Permission.microphone.request();
     if (!mic.isGranted) {
@@ -30,12 +28,17 @@ class _SoundMeterScreenState extends State<SoundMeterScreen> {
     }
 
     _recording = true;
+    _phase = 0;
     setState(() {});
-    _tick = Timer.periodic(const Duration(milliseconds: 150), (_) {
+    _tick = Timer.periodic(const Duration(milliseconds: 80), (_) {
       if (!_recording || !mounted) return;
-      // Simulate mic volume by generating pseudo-random noise
-      _lastVolume = (_lastVolume + 7) % 100;
-      setState(() => _volume = _lastVolume / 100.0);
+      _phase += 0.3;
+      // Natural-sounding blend: slow sine wave + fast noise + ambient floor
+      final sine = math.sin(_phase) * 0.3;
+      final noise = (math.Random().nextDouble() - 0.5) * 0.5;
+      final ambient = 0.15 + math.sin(_phase * 0.1) * 0.1;
+      final val = (ambient + sine + noise).clamp(0.0, 1.0);
+      setState(() => _volume = val);
     });
   }
 
@@ -44,7 +47,6 @@ class _SoundMeterScreenState extends State<SoundMeterScreen> {
     _tick?.cancel();
     setState(() {
       _volume = 0;
-      _lastVolume = 0;
     });
   }
 
@@ -66,12 +68,12 @@ class _SoundMeterScreenState extends State<SoundMeterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('SOUND METER',
+                Text('SOUND METER',
                     style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
                 const SizedBox(height: 24),
                 Text(
                   _recording ? '${_db.toStringAsFixed(1)} dB' : '0.0 dB',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: FlamingoColors.text,
                       fontSize: 48,
                       fontWeight: FontWeight.w300,
@@ -132,6 +134,18 @@ class _SoundMeterScreenState extends State<SoundMeterScreen> {
                         ),
                       ),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: FlamingoColors.card,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'Simulated · Mic recording not yet wired',
+                    style: TextStyle(color: FlamingoColors.muted, fontSize: 10, letterSpacing: 1),
                   ),
                 ),
               ],

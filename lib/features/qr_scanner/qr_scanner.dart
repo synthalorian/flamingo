@@ -22,10 +22,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: FlamingoColors.card,
-        title: const Text('QR Code Detected',
+        title: Text('QR Code Detected',
             style: TextStyle(color: FlamingoColors.primary)),
         content: SelectableText(text,
-            style: const TextStyle(color: FlamingoColors.text)),
+            style: TextStyle(color: FlamingoColors.text)),
         actions: [
           TextButton(
             onPressed: () {
@@ -34,12 +34,12 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                 const SnackBar(content: Text('Copied to clipboard')),
               );
             },
-            child: const Text('Copy',
+            child: Text('Copy',
                 style: TextStyle(color: FlamingoColors.neonBlue)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close',
+            child: Text('Close',
                 style: TextStyle(color: FlamingoColors.muted)),
           ),
         ],

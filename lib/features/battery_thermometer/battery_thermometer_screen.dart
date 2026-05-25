@@ -64,7 +64,7 @@ class _BatteryThermometerScreenState extends State<BatteryThermometerScreen> {
       appBar: AppBar(
         backgroundColor: FlamingoColors.scaffoldBg,
         elevation: 0,
-        title: const Text('BATTERY TEMP',
+        title: Text('BATTERY TEMP',
             style: TextStyle(
                 color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
         centerTitle: true,
@@ -90,7 +90,7 @@ class _BatteryThermometerScreenState extends State<BatteryThermometerScreen> {
                           _tempC == null
                               ? '--'
                               : '${temp.toStringAsFixed(1)}\u00B0C',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: FlamingoColors.text,
                             fontSize: 44,
                             fontWeight: FontWeight.w300,
@@ -100,7 +100,7 @@ class _BatteryThermometerScreenState extends State<BatteryThermometerScreen> {
                         const SizedBox(height: 4),
                         Text(
                           _status,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: FlamingoColors.muted,
                             fontSize: 11,
                             letterSpacing: 2,
@@ -118,15 +118,15 @@ class _BatteryThermometerScreenState extends State<BatteryThermometerScreen> {
                 children: [
                   _zoneDot(const Color(0xFF00D4FF)),
                   const SizedBox(width: 6),
-                  const Text('Cold', style: TextStyle(color: FlamingoColors.muted, fontSize: 11)),
+                  Text('Cold', style: TextStyle(color: FlamingoColors.muted, fontSize: 11)),
                   const SizedBox(width: 16),
                   _zoneDot(FlamingoColors.primary),
                   const SizedBox(width: 6),
-                  const Text('Normal', style: TextStyle(color: FlamingoColors.muted, fontSize: 11)),
+                  Text('Normal', style: TextStyle(color: FlamingoColors.muted, fontSize: 11)),
                   const SizedBox(width: 16),
                   _zoneDot(const Color(0xFFFF4500)),
                   const SizedBox(width: 6),
-                  const Text('Hot', style: TextStyle(color: FlamingoColors.muted, fontSize: 11)),
+                  Text('Hot', style: TextStyle(color: FlamingoColors.muted, fontSize: 11)),
                 ],
               ),
               const SizedBox(height: 20),
@@ -138,7 +138,7 @@ class _BatteryThermometerScreenState extends State<BatteryThermometerScreen> {
                   onTap: _read,
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                    child: const Text('REFRESH',
+                    child: Text('REFRESH',
                         style: TextStyle(
                             color: FlamingoColors.primary,
                             fontWeight: FontWeight.w600,

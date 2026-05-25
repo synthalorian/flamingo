@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/theme/flamingo_theme.dart';
 import '../../core/widgets/crt_background.dart';
 import '../../models/tool_model.dart';
 import '../../utils/app_constants.dart';
@@ -12,42 +13,84 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
+    final cs = theme.colorScheme;
 
     return Scaffold(
       body: CrtBackground(
         child: CustomScrollView(
           slivers: [
-            // ── Header ──────────────────────────────────────────────
+            // ── Glowing header ─────────────────────────────────────
             SliverToBoxAdapter(
-              child: Padding(
+              child: Container(
                 padding: const EdgeInsets.fromLTRB(24, 48, 24, 16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      cs.primary.withValues(alpha: 0.08),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      AppConstants.appTitle,
-                      style: textTheme.headlineLarge?.copyWith(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                    // Title row with settings
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppConstants.appTitle,
+                                style: theme.textTheme.headlineLarge?.copyWith(
+                                  color: cs.primary,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                AppConstants.appSubtitle,
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  color: cs.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.settings_rounded),
+                          color: cs.primary,
+                          onPressed: () => context.push('/settings'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Glow divider
+                    Container(
+                      height: 2,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            cs.primary.withValues(alpha: 0.6),
+                            cs.secondary.withValues(alpha: 0.3),
+                            Colors.transparent,
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      AppConstants.appSubtitle,
-                      style: textTheme.bodyLarge?.copyWith(
-                        color: theme.textTheme.bodyMedium?.color,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
                   ],
                 ),
               ),
             ),
+
             // ── Tool Grid ───────────────────────────────────────────
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -88,23 +131,23 @@ class _ToolCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final cs = theme.colorScheme;
 
     final card = Material(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
           color: tool.isComingSoon
-              ? theme.disabledColor.withValues(alpha: 0.15)
-              : colorScheme.primary.withValues(alpha: 0.2),
+              ? cs.onSurfaceVariant.withValues(alpha: 0.15)
+              : cs.primary.withValues(alpha: 0.25),
           width: 1,
         ),
       ),
       elevation: 0,
       surfaceTintColor: Colors.transparent,
       color: tool.isComingSoon
-          ? theme.disabledColor.withValues(alpha: 0.08)
-          : theme.cardTheme.color ?? const Color(0xFF2D1B4D),
+          ? cs.onSurfaceVariant.withValues(alpha: 0.08)
+          : cs.surfaceContainerHigh,
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: tool.isComingSoon
@@ -122,13 +165,13 @@ class _ToolCard extends StatelessWidget {
               if (tool.isComingSoon)
                 Icon(
                   Icons.lock_outline,
-                  color: theme.disabledColor.withValues(alpha: 0.5),
+                  color: cs.onSurfaceVariant.withValues(alpha: 0.5),
                   size: 36,
                 )
               else
                 Icon(
                   icon,
-                  color: colorScheme.primary,
+                  color: cs.primary,
                   size: 36,
                 ),
               const SizedBox(height: 8),
@@ -138,8 +181,8 @@ class _ToolCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: tool.isComingSoon
-                      ? theme.disabledColor.withValues(alpha: 0.5)
-                      : null,
+                      ? cs.onSurfaceVariant.withValues(alpha: 0.5)
+                      : cs.onSurface,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -152,13 +195,13 @@ class _ToolCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: theme.disabledColor.withValues(alpha: 0.12),
+                    color: cs.onSurfaceVariant.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     'Coming soon',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.disabledColor.withValues(alpha: 0.5),
+                      color: cs.onSurfaceVariant.withValues(alpha: 0.5),
                     ),
                   ),
                 )
@@ -168,13 +211,13 @@ class _ToolCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withValues(alpha: 0.1),
+                    color: cs.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     'TAP',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.primary,
+                      color: cs.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

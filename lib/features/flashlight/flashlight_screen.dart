@@ -138,8 +138,8 @@ class _FlashlightScreenState extends State<FlashlightScreen> {
 
               // Info text
               if (!_hasFlashlight)
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Text(
                     'No flashlight hardware detected on this device.',
                     textAlign: TextAlign.center,
@@ -147,8 +147,8 @@ class _FlashlightScreenState extends State<FlashlightScreen> {
                   ),
                 ),
               if (_permissionDenied)
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Text(
                     'Camera permission was denied. Enable it in Settings to use the flashlight.',
                     textAlign: TextAlign.center,

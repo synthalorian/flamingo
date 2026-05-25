@@ -41,7 +41,7 @@ class _LevelScreenState extends State<LevelScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'BUBBLE LEVEL',
                 style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4),
               ),
@@ -82,7 +82,7 @@ class _LevelScreenState extends State<LevelScreen> {
                             ],
                           ),
                         ),
-                        const Center(
+                        Center(
                           child: SizedBox(
                             width: 6,
                             height: 6,
@@ -126,7 +126,7 @@ class _LevelScreenState extends State<LevelScreen> {
               // Digital readout
               Text(
                 'P: ${pitchDeg.toStringAsFixed(1)}° / R: ${rollDeg.toStringAsFixed(1)}°',
-                style: const TextStyle(
+                style: TextStyle(
                     color: FlamingoColors.text,
                     fontFamily: 'monospace',
                     fontSize: 22,

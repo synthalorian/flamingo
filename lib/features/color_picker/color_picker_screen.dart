@@ -49,7 +49,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
           child: Column(
             children: [
               const SizedBox(height: 16),
-              const Text('COLOR PICKER', style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
+              Text('COLOR PICKER', style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
               const SizedBox(height: 24),
 
               // Hue slider
@@ -78,7 +78,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
                             child: Center(
                               child: Text(
                                 _hex.toUpperCase(),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: FlamingoColors.text,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -114,7 +114,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
                     width: 80,
                     child: Column(
                       children: [
-                        const Text('SAT', style: TextStyle(color: FlamingoColors.muted, fontSize: 10)),
+                        Text('SAT', style: TextStyle(color: FlamingoColors.muted, fontSize: 10)),
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +131,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
                                   onChanged: (v) => setState(() => _saturation = v),
                                 ),
                               ),
-                              const Text('BRT', style: TextStyle(color: FlamingoColors.muted, fontSize: 10)),
+                              Text('BRT', style: TextStyle(color: FlamingoColors.muted, fontSize: 10)),
                               Expanded(
                                 child: SliderTheme(
                                   data: SliderThemeData(
@@ -157,7 +157,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
               const SizedBox(height: 24),
 
               // RGB label
-              Text('RGB($_rgbStr)', style: const TextStyle(color: FlamingoColors.text, fontSize: 16, fontFamily: 'monospace')),
+              Text('RGB($_rgbStr)', style: TextStyle(color: FlamingoColors.text, fontSize: 16, fontFamily: 'monospace')),
               const SizedBox(height: 24),
 
               // Copy buttons

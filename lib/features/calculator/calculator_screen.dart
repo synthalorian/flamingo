@@ -212,7 +212,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     if (controller.expression.isNotEmpty)
                       Text(
                         controller.expression,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: FlamingoColors.muted,
                           fontSize: 18,
                           fontFamily: 'monospace',
@@ -227,7 +227,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                           : controller.expression.isEmpty
                               ? '0'
                               : controller.expression,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: FlamingoColors.text,
                         fontSize: 52,
                         fontWeight: FontWeight.w300,
@@ -245,7 +245,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 child: Column(
                   children: [
                     _row(['C', '±', '%', '÷'], isOp: [false, false, false, true], op: [null, null, null, '÷']),
-                    _row(['1', '2', '3', '−'], isOp: [false, false, false, true]),
+                    _row(['1', '2', '3', '−'], isOp: [false, false, false, true], op: [null, null, null, '-']),
                     _row(['4', '5', '6', '+'], isOp: [false, false, false, true]),
                     _row(['7', '8', '9', '×'], isOp: [false, false, false, true]),
                     _row(['0', '.', '⌫', '='], isOp: [false, false, false, true]),

@@ -194,7 +194,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                 ),
                 const SizedBox(height: 12),
                 IconButton(
-                  icon: const Icon(Icons.swap_vert, color: FlamingoColors.primary),
+                  icon: Icon(Icons.swap_vert, color: FlamingoColors.primary),
                   onPressed: () {
                     setState(() {
                       final _tmp = _fromU;
@@ -227,7 +227,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 56, vertical: 16),
                       alignment: Alignment.center,
-                      child: const Text(
+                      child: Text(
                         'CONVERT',
                         style: TextStyle(
                           color: FlamingoColors.primary,
@@ -259,7 +259,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: FlamingoColors.muted, fontSize: 11, letterSpacing: 3)),
+        Text(label, style: TextStyle(color: FlamingoColors.muted, fontSize: 11, letterSpacing: 3)),
         const SizedBox(height: 8),
         Row(
           children: [
@@ -274,13 +274,13 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                     ? TextField(
                         controller: _inputCtrl,
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: FlamingoColors.text,
                           fontSize: 32,
                           fontFamily: 'monospace',
                           fontWeight: FontWeight.w300,
                         ),
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                           hintText: '0',
@@ -291,7 +291,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         child: Text(
                           result != null ? _fmt(result) : '—',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: FlamingoColors.text,
                             fontSize: 32,
                             fontFamily: 'monospace',
@@ -314,7 +314,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                   child: DropdownButton<String>(
                     value: unit,
                     dropdownColor: FlamingoColors.card,
-                    style: const TextStyle(color: FlamingoColors.text, fontFamily: 'monospace'),
+                    style: TextStyle(color: FlamingoColors.text, fontFamily: 'monospace'),
                     items: List<DropdownMenuItem<String>>.generate(
                       units.length,
                       (i) => DropdownMenuItem(value: units[i], child: Text(_unitLabel[units[i]] ?? units[i])),

@@ -87,7 +87,7 @@ class _MagnifierScreenState extends State<MagnifierScreen> {
       appBar: AppBar(
         backgroundColor: FlamingoColors.scaffoldBg,
         elevation: 0,
-        title: const Text('MAGNIFIER',
+        title: Text('MAGNIFIER',
             style: TextStyle(
                 color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
         centerTitle: true,
@@ -103,7 +103,7 @@ class _MagnifierScreenState extends State<MagnifierScreen> {
       ),
       body: CrtBackground(
         child: _loading
-            ? const Center(
+            ? Center(
                 child: CircularProgressIndicator(
                   color: FlamingoColors.primary,
                   strokeWidth: 2,
@@ -115,7 +115,7 @@ class _MagnifierScreenState extends State<MagnifierScreen> {
                       padding: const EdgeInsets.all(32),
                       child: Text(_error!,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(color: FlamingoColors.muted)),
+                          style: TextStyle(color: FlamingoColors.muted)),
                     ),
                   )
                 : Stack(
@@ -139,7 +139,7 @@ class _MagnifierScreenState extends State<MagnifierScreen> {
                           ),
                           child: Text(
                             '${(_zoom * 100).toInt()}%',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: FlamingoColors.primary,
                               fontFamily: 'monospace',
                               fontSize: 14,
