@@ -88,21 +88,21 @@ class _NotePadScreenState extends State<NotePadScreen> {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              const Text('NOTE PAD',
+              Text('NOTE PAD',
                   style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
               const SizedBox(height: 16),
 
               if (_loading)
-                const Expanded(child: Center(child: CircularProgressIndicator(color: FlamingoColors.primary)))
+                Expanded(child: Center(child: CircularProgressIndicator(color: FlamingoColors.primary)))
               else if (_notes.isEmpty)
                 Expanded(
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.note_alt, size: 64, color: FlamingoColors.muted),
+                        Icon(Icons.note_alt, size: 64, color: FlamingoColors.muted),
                         const SizedBox(height: 16),
-                        const Text('No notes yet', style: TextStyle(color: FlamingoColors.muted)),
+                        Text('No notes yet', style: TextStyle(color: FlamingoColors.muted)),
                         const SizedBox(height: 8),
                         Material(
                           color: FlamingoColors.primary.withValues(alpha: 0.15),
@@ -113,7 +113,7 @@ class _NotePadScreenState extends State<NotePadScreen> {
                             onTap: _addNote,
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              child: const Text('ADD NOTE',
+                              child: Text('ADD NOTE',
                                   style: TextStyle(color: FlamingoColors.primary, fontWeight: FontWeight.w600, letterSpacing: 2)),
                             ),
                           ),
@@ -156,9 +156,9 @@ class _NotePadScreenState extends State<NotePadScreen> {
           children: [
             ListTile(
               title: Text(note['title'] as String,
-                  style: const TextStyle(color: FlamingoColors.text, fontWeight: FontWeight.w600)),
+                  style: TextStyle(color: FlamingoColors.text, fontWeight: FontWeight.w600)),
               subtitle: Text('Created: ${note['created']}',
-                  style: const TextStyle(color: FlamingoColors.muted)),
+                  style: TextStyle(color: FlamingoColors.muted)),
               trailing: IconButton(
                 icon: const Icon(Icons.delete, size: 20),
                 color: FlamingoColors.muted,
@@ -171,11 +171,11 @@ class _NotePadScreenState extends State<NotePadScreen> {
                 maxLines: null,
                 decoration: InputDecoration(
                   hintText: 'Type your note here...',
-                  hintStyle: const TextStyle(color: FlamingoColors.muted),
+                  hintStyle: TextStyle(color: FlamingoColors.muted),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.all(8),
                 ),
-                style: const TextStyle(color: FlamingoColors.text),
+                style: TextStyle(color: FlamingoColors.text),
                 onSubmitted: (v) => _updateNote(note['id'], 'body', v),
                 onChanged: (v) => _updateNote(note['id'], 'body', v),
               ),

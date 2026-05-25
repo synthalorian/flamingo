@@ -85,7 +85,7 @@ class _PasswordGenScreenState extends State<PasswordGenScreen> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                const Text('PASSWORD GENERATOR',
+                Text('PASSWORD GENERATOR',
                     style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
                 const SizedBox(height: 32),
 
@@ -107,7 +107,7 @@ class _PasswordGenScreenState extends State<PasswordGenScreen> {
                             _password.isEmpty || _password.startsWith('Select')
                                 ? '••••••••••••••••'
                                 : _password,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: FlamingoColors.text,
                               fontSize: 18,
                               fontFamily: 'monospace',
@@ -150,7 +150,7 @@ class _PasswordGenScreenState extends State<PasswordGenScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     children: [
-                      const Text('Length:', style: TextStyle(color: FlamingoColors.muted)),
+                      Text('Length:', style: TextStyle(color: FlamingoColors.muted)),
                       const SizedBox(width: 12),
                       Expanded(
                         child: SliderTheme(
@@ -167,7 +167,7 @@ class _PasswordGenScreenState extends State<PasswordGenScreen> {
                           ),
                         ),
                       ),
-                      Text('$_length', style: const TextStyle(color: FlamingoColors.text, fontSize: 18, fontFamily: 'monospace')),
+                      Text('$_length', style: TextStyle(color: FlamingoColors.text, fontSize: 18, fontFamily: 'monospace')),
                     ],
                   ),
                 ),
@@ -196,7 +196,7 @@ class _PasswordGenScreenState extends State<PasswordGenScreen> {
                     onTap: _generate,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 56, vertical: 18),
-                      child: const Text('GENERATE',
+                      child: Text('GENERATE',
                           style: TextStyle(color: FlamingoColors.primary, fontWeight: FontWeight.w600, letterSpacing: 3)),
                     ),
                   ),

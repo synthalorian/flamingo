@@ -53,7 +53,7 @@ class _RulerScreenState extends State<RulerScreen> {
               // Calibration slider hint
               Text(
                 '${_pxPerCm.toStringAsFixed(1)} px/${_unitLabel}',
-                style: const TextStyle(
+                style: TextStyle(
                   color: FlamingoColors.accent,
                   fontSize: 14,
                   fontFamily: 'monospace',
@@ -61,7 +61,7 @@ class _RulerScreenState extends State<RulerScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Use a known ruler — adjust as needed',
                 style: TextStyle(color: FlamingoColors.muted, fontSize: 12),
               ),
@@ -83,7 +83,7 @@ class _RulerScreenState extends State<RulerScreen> {
                 lengthCm: _rulerLengthCm,
               ),
               const Spacer(),
-              const Text(
+              Text(
                 'Scroll to measure longer lengths',
                 style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 1),
               ),
@@ -140,7 +140,7 @@ class _Ruler extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('0  $unitSymbol',
-              style: const TextStyle(
+              style: TextStyle(
                 color: FlamingoColors.accent,
                 fontSize: 11,
                 fontFamily: 'monospace',
@@ -182,7 +182,7 @@ class _Ruler extends StatelessWidget {
             ),
           ),
           Text('${lengthCm.toInt()} $unitSymbol',
-              style: const TextStyle(
+              style: TextStyle(
                 color: FlamingoColors.accent,
                 fontSize: 11,
                 fontFamily: 'monospace',

@@ -52,7 +52,7 @@ class _MetronomeScreenState extends State<MetronomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('METRONOME',
+                Text('METRONOME',
                     style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
                 const SizedBox(height: 24),
                 Row(
@@ -66,7 +66,7 @@ class _MetronomeScreenState extends State<MetronomeScreen> {
                     const SizedBox(width: 32),
                     Text(
                       '$_bpm',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: FlamingoColors.text,
                         fontSize: 72,
                         fontWeight: FontWeight.w300,
@@ -82,7 +82,7 @@ class _MetronomeScreenState extends State<MetronomeScreen> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                const Text('BPM', style: TextStyle(color: FlamingoColors.muted, fontSize: 13)),
+                Text('BPM', style: TextStyle(color: FlamingoColors.muted, fontSize: 13)),
                 const SizedBox(height: 32),
 
                 // Flash indicator

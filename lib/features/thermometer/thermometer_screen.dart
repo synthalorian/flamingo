@@ -75,14 +75,14 @@ class _ThermometerScreenState extends State<ThermometerScreen> with SingleTicker
                           children: [
                             Text(
                               '${_display.toStringAsFixed(1)}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: FlamingoColors.text,
                                 fontSize: 40,
                                 fontWeight: FontWeight.w300,
                                 fontFamily: 'monospace',
                               ),
                             ),
-                            const Text(
+                            Text(
                               '°C',
                               style: TextStyle(color: FlamingoColors.muted, fontSize: 14, fontFamily: 'monospace'),
                             ),
@@ -97,7 +97,7 @@ class _ThermometerScreenState extends State<ThermometerScreen> with SingleTicker
               // °F under the dial
               Text(
                 '${_f.toStringAsFixed(1)} °F',
-                style: const TextStyle(color: FlamingoColors.accent, fontFamily: 'monospace', fontSize: 15, letterSpacing: 2),
+                style: TextStyle(color: FlamingoColors.accent, fontFamily: 'monospace', fontSize: 15, letterSpacing: 2),
               ),
               const SizedBox(height: 32),
               Container(
@@ -107,7 +107,7 @@ class _ThermometerScreenState extends State<ThermometerScreen> with SingleTicker
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: FlamingoColors.cardBorder),
                 ),
-                child: const Text(
+                child: Text(
                   'Updates every 10 s  ·  Simulated',
                   style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 2),
                 ),
@@ -163,7 +163,7 @@ class _ThermoDialPainter extends CustomPainter {
         final lx = cx + cos * labelR;
         final ly = cy + sin * labelR;
         final tp = TextPainter(
-          text: TextSpan(text: t.toInt().toString(), style: const TextStyle(color: FlamingoColors.text, fontSize: 10, fontFamily: 'monospace')),
+          text: TextSpan(text: t.toInt().toString(), style: TextStyle(color: FlamingoColors.text, fontSize: 10, fontFamily: 'monospace')),
           textDirection: TextDirection.ltr,
         )..layout();
         tp.paint(canvas, Offset(lx - tp.width / 2, ly - tp.height / 2));

@@ -78,7 +78,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
               // Time display
               Text(
                 _formatDuration(elapsed),
-                style: const TextStyle(
+                style: TextStyle(
                   color: FlamingoColors.text,
                   fontSize: 56,
                   fontWeight: FontWeight.w300,
@@ -89,7 +89,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
               const SizedBox(height: 8),
               // Status indicator
               if (_running)
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
@@ -107,7 +107,7 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                   ],
                 )
               else if (elapsed.inMilliseconds > 0)
-                const Text('PAUSED', style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 3)),
+                Text('PAUSED', style: TextStyle(color: FlamingoColors.muted, fontSize: 12, letterSpacing: 3)),
               const SizedBox(height: 32),
 
               // Primary controls
@@ -135,13 +135,13 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
               ),
 
               const SizedBox(height: 24),
-              const Divider(color: FlamingoColors.cardBorder, thickness: 1),
+              Divider(color: FlamingoColors.cardBorder, thickness: 1),
               const SizedBox(height: 8),
 
               // Laps
               Expanded(
                 child: _laps.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
                           'No laps yet\nTap LAP while running',
                           textAlign: TextAlign.center,
@@ -168,15 +168,15 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
                               children: [
                                 Text(
                                   'Lap ${_laps.length - i}',
-                                  style: const TextStyle(color: FlamingoColors.muted, fontSize: 13),
+                                  style: TextStyle(color: FlamingoColors.muted, fontSize: 13),
                                 ),
                                 Text(
                                   _formatDuration(_laps[i]),
-                                  style: const TextStyle(color: FlamingoColors.neonBlue, fontSize: 15, fontFamily: 'monospace'),
+                                  style: TextStyle(color: FlamingoColors.neonBlue, fontSize: 15, fontFamily: 'monospace'),
                                 ),
                                 Text(
                                   '+${_formatDuration(totalUpToLap)}',
-                                  style: const TextStyle(color: FlamingoColors.accent, fontSize: 13, fontFamily: 'monospace'),
+                                  style: TextStyle(color: FlamingoColors.accent, fontSize: 13, fontFamily: 'monospace'),
                                 ),
                               ],
                             ),

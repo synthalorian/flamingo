@@ -28,12 +28,14 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         // ── Battery temperature ──────────────────────────────────────
+        // EXTRA_TEMPERATURE returns tenths of °C (e.g. 325 = 32.5°C).
+        // Send raw tenths to Dart; Dart divides by 10.0 for °C.
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, BATTERY_CHANNEL)
             .setMethodCallHandler { call, result ->
                 if (call.method == "getTemp") {
-                    val temp = getBatteryTemperatureC()
-                    if (temp != null) {
-                        result.success((temp * 100).toInt())
+                    val tenths = getBatteryTemperatureTenths()
+                    if (tenths != null) {
+                        result.success(tenths)  // raw tenths, e.g. 325
                     } else {
                         result.error(
                             "unavailable",
@@ -84,12 +86,13 @@ class MainActivity : FlutterActivity() {
         _mediaPlayer = null
     }
 
-    // ── Battery temperature (Intent-based, works on all API levels 21+) ──
-    private fun getBatteryTemperatureC(): Double? {
+    // ── Battery temperature: returns tenths of °C (Android API) ──
+    // e.g. 325 = 32.5°C. Raw value sent to Dart, which divides by 10.
+    private fun getBatteryTemperatureTenths(): Int? {
         val intent = registerReceiver(null,
             IntentFilter(Intent.ACTION_BATTERY_CHANGED)) ?: return null
-        val tenths = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, Int.MIN_VALUE)
-        return tenths.takeIf { it != Int.MIN_VALUE }?.toDouble()?.let { it / 10.0 }
+        return intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, Int.MIN_VALUE)
+            .takeIf { it != Int.MIN_VALUE }
     }
 
     override fun onDestroy() {
