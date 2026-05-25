@@ -24,6 +24,9 @@ import '../../features/magnifier/magnifier_screen.dart';
 import '../../features/breathing/breathing_screen.dart';
 import '../../features/step_counter/step_counter_screen.dart';
 import '../../features/pomodoro/pomodoro_screen.dart';
+import '../../features/ambient_sounds/ambient_sounds_screen.dart';
+import '../../features/drawing_board/drawing_board_screen.dart';
+import '../../features/guitar_tuner/guitar_tuner_screen.dart';
 import '../../features/home/home_screen.dart';
 
 /// Central router configuration for the Flamingo app.
@@ -97,6 +100,12 @@ class AppRouter {
                     return const StepCounterScreen();
                   case 'pomodoro':
                     return const PomodoroScreen();
+                  case 'ambientSounds':
+                    return const AmbientSoundsScreen();
+                  case 'drawingBoard':
+                    return const DrawingBoardScreen();
+                  case 'guitarTuner':
+                    return const GuitarTunerScreen();
                   default:
                     return Scaffold(
                       backgroundColor: FlamingoColors.card,
