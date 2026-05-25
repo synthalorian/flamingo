@@ -15,19 +15,13 @@ class ToolScreen extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(toolId),
-      ),
+      appBar: AppBar(title: Text(toolId)),
       body: CrtBackground(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.build,
-                size: 64,
-                color: theme.colorScheme.primary,
-              ),
+              Icon(Icons.build, size: 64, color: theme.colorScheme.primary),
               const SizedBox(height: 16),
               Text(
                 'Tool $toolId - coming soon',

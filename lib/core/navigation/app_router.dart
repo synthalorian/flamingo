@@ -92,8 +92,10 @@ class AppRouter {
                     return Scaffold(
                       backgroundColor: FlamingoColors.card,
                       body: Center(
-                        child: Text('Tool "$toolId" not found',
-                            style: TextStyle(color: FlamingoColors.muted)),
+                        child: Text(
+                          'Tool "$toolId" not found',
+                          style: TextStyle(color: FlamingoColors.muted),
+                        ),
                       ),
                     );
                 }

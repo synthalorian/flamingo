@@ -40,7 +40,9 @@ class ThemeNotifier extends Notifier<int> {
   }
 }
 
-final themeIndexProvider = NotifierProvider<ThemeNotifier, int>(ThemeNotifier.new);
+final themeIndexProvider = NotifierProvider<ThemeNotifier, int>(
+  ThemeNotifier.new,
+);
 
 /// Derived provider that returns the current ThemeData.
 final themeDataProvider = Provider<ThemeData>((ref) {
@@ -57,42 +59,61 @@ enum FlamingoThemeName {
 
   String get label {
     switch (this) {
-      case FlamingoThemeName.darkSynthwave: return 'Dark Synthwave';
-      case FlamingoThemeName.lightClean:    return 'Light Clean';
-      case FlamingoThemeName.flamingo:      return 'Flamingo';
-      case FlamingoThemeName.synthwave84:   return 'Synthwave \'84';
+      case FlamingoThemeName.darkSynthwave:
+        return 'Dark Synthwave';
+      case FlamingoThemeName.lightClean:
+        return 'Light Clean';
+      case FlamingoThemeName.flamingo:
+        return 'Flamingo';
+      case FlamingoThemeName.synthwave84:
+        return 'Synthwave \'84';
     }
   }
 
   String get description {
     switch (this) {
-      case FlamingoThemeName.darkSynthwave: return 'Deep purple, hot pink, neon cyan';
-      case FlamingoThemeName.lightClean:    return 'Clean light with pink accents';
-      case FlamingoThemeName.flamingo:      return 'Hot pink on dark rose';
-      case FlamingoThemeName.synthwave84:   return 'Vivid purple, yellow, pink, neon cyan';
+      case FlamingoThemeName.darkSynthwave:
+        return 'Deep purple, hot pink, neon cyan';
+      case FlamingoThemeName.lightClean:
+        return 'Clean light with pink accents';
+      case FlamingoThemeName.flamingo:
+        return 'Hot pink on dark rose';
+      case FlamingoThemeName.synthwave84:
+        return 'Vivid purple, yellow, pink, neon cyan';
     }
   }
 
   IconData get icon {
     switch (this) {
-      case FlamingoThemeName.darkSynthwave: return Icons.dark_mode;
-      case FlamingoThemeName.lightClean:    return Icons.light_mode;
-      case FlamingoThemeName.flamingo:      return Icons.flash_on;
-      case FlamingoThemeName.synthwave84:   return Icons.grid_on;
+      case FlamingoThemeName.darkSynthwave:
+        return Icons.dark_mode;
+      case FlamingoThemeName.lightClean:
+        return Icons.light_mode;
+      case FlamingoThemeName.flamingo:
+        return Icons.flash_on;
+      case FlamingoThemeName.synthwave84:
+        return Icons.grid_on;
     }
   }
 
   Color get accentColor {
     switch (this) {
-      case FlamingoThemeName.darkSynthwave: return const Color(0xFFFF69B4);
-      case FlamingoThemeName.lightClean:    return const Color(0xFFD81B60);
-      case FlamingoThemeName.flamingo:      return const Color(0xFFFF69B4);
-      case FlamingoThemeName.synthwave84:   return const Color(0xFF8F00FF);
+      case FlamingoThemeName.darkSynthwave:
+        return const Color(0xFFFF69B4);
+      case FlamingoThemeName.lightClean:
+        return const Color(0xFFD81B60);
+      case FlamingoThemeName.flamingo:
+        return const Color(0xFFFF69B4);
+      case FlamingoThemeName.synthwave84:
+        return const Color(0xFF8F00FF);
     }
   }
 
-  int get themeIndex => this == FlamingoThemeName.darkSynthwave ? 0
-      : this == FlamingoThemeName.lightClean ? 1
-      : this == FlamingoThemeName.flamingo ? 2
+  int get themeIndex => this == FlamingoThemeName.darkSynthwave
+      ? 0
+      : this == FlamingoThemeName.lightClean
+      ? 1
+      : this == FlamingoThemeName.flamingo
+      ? 2
       : 3;
 }

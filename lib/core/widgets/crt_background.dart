@@ -13,10 +13,7 @@ class CrtBackground extends StatelessWidget {
     return Stack(
       children: [
         Container(color: Theme.of(context).scaffoldBackgroundColor),
-        CustomPaint(
-          size: Size.infinite,
-          painter: _ScanlinePainter(),
-        ),
+        CustomPaint(size: Size.infinite, painter: _ScanlinePainter()),
         child,
       ],
     );
