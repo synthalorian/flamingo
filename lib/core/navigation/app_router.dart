@@ -21,6 +21,9 @@ import '../../features/ruler/ruler_screen.dart';
 import '../../features/unit_converter/unit_converter_screen.dart';
 import '../../features/battery_thermometer/battery_thermometer_screen.dart';
 import '../../features/magnifier/magnifier_screen.dart';
+import '../../features/breathing/breathing_screen.dart';
+import '../../features/step_counter/step_counter_screen.dart';
+import '../../features/pomodoro/pomodoro_screen.dart';
 import '../../features/home/home_screen.dart';
 
 /// Central router configuration for the Flamingo app.
@@ -88,6 +91,12 @@ class AppRouter {
                     return const BatteryThermometerScreen();
                   case 'magnifier':
                     return const MagnifierScreen();
+                  case 'breathing':
+                    return const BreathingScreen();
+                  case 'stepCounter':
+                    return const StepCounterScreen();
+                  case 'pomodoro':
+                    return const PomodoroScreen();
                   default:
                     return Scaffold(
                       backgroundColor: FlamingoColors.card,
