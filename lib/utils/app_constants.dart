@@ -216,6 +216,33 @@ class AppConstants {
       icon: Icons.music_note_outlined,
       accentColor: const Color(0xFFCE93D8),
     ),
+    // ── Tier 6 – New: Alarm Clock ───────────────────────────────────────
+    ToolItem(
+      id: 'alarmClock',
+      title: 'Alarm Clock',
+      description: 'Multiple alarms with snooze',
+      routePath: '/tool/alarmClock',
+      icon: Icons.alarm,
+      accentColor: const Color(0xFFE57373),
+    ),
+    // ── Tier 6 – New: Voice Recorder ────────────────────────────────────
+    ToolItem(
+      id: 'voiceRecorder',
+      title: 'Voice Recorder',
+      description: 'Record & play back memos',
+      routePath: '/tool/voiceRecorder',
+      icon: Icons.mic_rounded,
+      accentColor: const Color(0xFFCE93D8),
+    ),
+    // ── Tier 6 – New: Weather ───────────────────────────────────────────
+    ToolItem(
+      id: 'weather',
+      title: 'Weather',
+      description: 'Current conditions & forecast',
+      routePath: '/tool/weather',
+      icon: Icons.wb_sunny,
+      accentColor: const Color(0xFF64B5F6),
+    ),
   ];
 
   /// Icon data for each tool id (used by home screen).
@@ -269,6 +296,12 @@ class AppConstants {
         return Icons.palette;
       case 'guitarTuner':
         return Icons.music_note_outlined;
+      case 'alarmClock':
+        return Icons.alarm;
+      case 'voiceRecorder':
+        return Icons.mic_rounded;
+      case 'weather':
+        return Icons.wb_sunny;
       default:
         return Icons.apps;
     }

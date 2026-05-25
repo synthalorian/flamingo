@@ -77,6 +77,37 @@ class AudioGenerator {
     return _toWav(samples);
   }
 
+  /// Generate a gentle chime-like ringtone.
+  static Uint8List generateGentle(int durationSec) {
+    final numSamples = _sampleRate * durationSec;
+    final samples = Int16List(numSamples);
+    for (int i = 0; i < numSamples; i++) {
+      final t = i / _sampleRate;
+      final envelope = (1 - t / durationSec).clamp(0.0, 1.0);
+      final fadeIn = (t * 5).clamp(0.0, 1.0);
+      final s = sin(2 * pi * 523.25 * t) * 0.3 * envelope * fadeIn // C
+            + sin(2 * pi * 659.25 * t) * 0.2 * envelope * fadeIn // E
+            + sin(2 * pi * 783.99 * t) * 0.15 * envelope * fadeIn; // G
+      samples[i] = (s * 32767 * 0.4).clamp(-32767, 32767).toInt();
+    }
+    return _toWav(samples);
+  }
+
+  /// Generate a more urgent alarm ringtone.
+  static Uint8List generateAlarm(int durationSec) {
+    final numSamples = _sampleRate * durationSec;
+    final samples = Int16List(numSamples);
+    for (int i = 0; i < numSamples; i++) {
+      final t = i / _sampleRate;
+      // Alternating tones with tremolo
+      final note = (t * 2).floor() % 2 == 0 ? 800.0 : 1000.0;
+      final tremolo = 0.7 + 0.3 * sin(2 * pi * 4 * t);
+      final s = sin(2 * pi * note * t) * tremolo;
+      samples[i] = (s * 32767 * 0.5).clamp(-32767, 32767).toInt();
+    }
+    return _toWav(samples);
+  }
+
   static Uint8List _toWav(Int16List samples) {
     final numSamples = samples.length;
     final dataSize = numSamples * 2;
