@@ -69,7 +69,7 @@ enum FlamingoThemeName {
       case FlamingoThemeName.darkSynthwave: return 'Deep purple, hot pink, neon cyan';
       case FlamingoThemeName.lightClean:    return 'Clean light with pink accents';
       case FlamingoThemeName.flamingo:      return 'Hot pink on dark rose';
-      case FlamingoThemeName.synthwave84:   return 'Deep purple, neon cyan, grid vibes';
+      case FlamingoThemeName.synthwave84:   return 'Vivid purple, yellow, pink, neon cyan';
     }
   }
 
@@ -87,7 +87,7 @@ enum FlamingoThemeName {
       case FlamingoThemeName.darkSynthwave: return const Color(0xFFFF69B4);
       case FlamingoThemeName.lightClean:    return const Color(0xFFD81B60);
       case FlamingoThemeName.flamingo:      return const Color(0xFFFF69B4);
-      case FlamingoThemeName.synthwave84:   return const Color(0xFF00D4FF);
+      case FlamingoThemeName.synthwave84:   return const Color(0xFF8F00FF);
     }
   }
 
