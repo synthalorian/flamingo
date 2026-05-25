@@ -4,12 +4,12 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 
-import '../../core/theme/flamingo_theme.dart';
 import '../../core/widgets/crt_background.dart';
+import '../../core/widgets/animated_background.dart';
 
 const List<int> _allSides = [4, 6, 8, 10, 12, 20];
 
-/// Animated die face that shows a rolling animation with a final result.
+/// Beautiful animated die face with per-die-type styling.
 class _AnimatedDie extends StatefulWidget {
   final int sides;
   final int result;
@@ -29,44 +29,50 @@ class _AnimatedDie extends StatefulWidget {
 
 class _AnimatedDieState extends State<_AnimatedDie>
     with TickerProviderStateMixin {
-  late AnimationController _rollController;
-  late Animation<double> _rollAnim;
+  late AnimationController _bounceCtrl;
+  late AnimationController _spinCtrl;
+  late Animation<double> _bounceAnim;
+  late Animation<double> _spinAnim;
   int _displayValue = 1;
+  Timer? _rollTimer;
 
   @override
   void initState() {
     super.initState();
-    _rollController = AnimationController(
+    _bounceCtrl = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    _rollAnim = CurvedAnimation(
-      parent: _rollController,
+    _spinCtrl = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+    _bounceAnim = CurvedAnimation(
+      parent: _bounceCtrl,
       curve: Curves.elasticOut,
     );
+    _spinAnim = CurvedAnimation(parent: _spinCtrl, curve: Curves.easeOutCubic);
     _displayValue = widget.result;
     if (widget.rolling) {
-      _rollController.forward();
-      _animateDice();
+      _startRoll();
     }
   }
 
-  void _animateDice() {
-    if (!widget.rolling) return;
-    // Rapid-fire random numbers during roll
+  void _startRoll() {
+    _bounceCtrl.forward(from: 0);
+    _spinCtrl.forward(from: 0);
     int tick = 0;
-    Timer.periodic(const Duration(milliseconds: 40), (t) {
-      if (!widget.rolling || tick >= 14) {
+    _rollTimer?.cancel();
+    _rollTimer = Timer.periodic(const Duration(milliseconds: 35), (t) {
+      if (!widget.rolling || tick >= 16) {
         t.cancel();
         if (!mounted) return;
-        setState(() {
-          _displayValue = widget.result;
-        });
+        setState(() => _displayValue = widget.result);
         return;
       }
       if (!mounted) return;
       setState(() {
-        _displayValue = math.Random.secure().nextInt(widget.sides) + 1;
+        _displayValue = math.Random().nextInt(widget.sides) + 1;
       });
       tick++;
     });
@@ -75,57 +81,142 @@ class _AnimatedDieState extends State<_AnimatedDie>
   @override
   void didUpdateWidget(covariant _AnimatedDie oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.rolling != oldWidget.rolling) {
-      if (widget.rolling) {
-        _rollController.forward();
-        _animateDice();
-      }
+    if (widget.rolling && !oldWidget.rolling) {
+      _startRoll();
     }
   }
 
   @override
   void dispose() {
-    _rollController.dispose();
+    _bounceCtrl.dispose();
+    _spinCtrl.dispose();
+    _rollTimer?.cancel();
     super.dispose();
+  }
+
+  Color _dieColor(int sides) {
+    switch (sides) {
+      case 4:
+        return const Color(0xFFFF69B4); // hot pink
+      case 6:
+        return const Color(0xFF00D4FF); // cyan
+      case 8:
+        return const Color(0xFFB026FF); // purple
+      case 10:
+        return const Color(0xFFFFD700); // gold
+      case 12:
+        return const Color(0xFFFF4500); // orange-red
+      case 20:
+        return const Color(0xFF39FF14); // neon green
+      default:
+        return const Color(0xFFFF69B4);
+    }
+  }
+
+  IconData _dieIcon(int sides) {
+    switch (sides) {
+      case 4:
+        return Icons.change_history;
+      case 6:
+        return Icons.stop;
+      case 8:
+        return Icons.diamond;
+      case 10:
+        return Icons.hexagon;
+      case 12:
+        return Icons.square;
+      case 20:
+        return Icons.circle;
+      default:
+        return Icons.casino;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final dieColor = _dieColor(widget.sides);
+
     return AnimatedBuilder(
-      animation: _rollAnim,
+      animation: Listenable.merge([_bounceAnim, _spinAnim]),
       builder: (context, child) {
-        final scale = _rollAnim.value;
-        final rotation = _rollAnim.value * math.pi * 2;
+        final bounceScale = 0.8 + _bounceAnim.value * 0.2;
+        final spinAngle = _spinAnim.value * math.pi * 2;
+        final isRolling = widget.rolling;
 
         return Transform.scale(
-          scale: 0.8 + scale * 0.2,
+          scale: bounceScale,
           child: Transform.rotate(
-            angle: rotation,
+            angle: spinAngle,
             child: Container(
               width: widget.size,
               height: widget.size,
-              margin: EdgeInsets.all(widget.size * 0.08),
+              margin: EdgeInsets.all(widget.size * 0.06),
               decoration: BoxDecoration(
-                color: FlamingoColors.surface,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: FlamingoColors.primary, width: 1.5),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    dieColor.withValues(alpha: 0.9),
+                    dieColor.withValues(alpha: 0.4),
+                    dieColor.withValues(alpha: 0.7),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: dieColor.withValues(alpha: 0.6),
+                  width: 1.5,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: FlamingoColors.primary.withValues(alpha: 0.2 * scale),
-                    blurRadius: 6 * scale,
+                    color: dieColor.withValues(alpha: isRolling ? 0.4 : 0.2),
+                    blurRadius: isRolling ? 16 : 8,
+                    spreadRadius: isRolling ? 4 : 1,
                   ),
                 ],
               ),
-              child: Center(
-                child: Text(
-                  '$_displayValue',
-                  style: TextStyle(
-                    color: FlamingoColors.primary,
-                    fontSize: widget.size * 0.42,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'monospace',
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Die type indicator (small icon in corner)
+                  Positioned(
+                    top: 2,
+                    right: 3,
+                    child: Icon(
+                      _dieIcon(widget.sides),
+                      size: widget.size * 0.18,
+                      color: Colors.white.withValues(alpha: 0.3),
+                    ),
                   ),
-                ),
+                  // Value
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '$_displayValue',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: widget.size * 0.38,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -1,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withValues(alpha: 0.3),
+                              blurRadius: 3,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        'd${widget.sides}',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.5),
+                          fontSize: widget.size * 0.13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -142,7 +233,8 @@ class DiceRollerScreen extends StatefulWidget {
   State<DiceRollerScreen> createState() => _DiceRollerScreenState();
 }
 
-class _DiceRollerScreenState extends State<DiceRollerScreen> {
+class _DiceRollerScreenState extends State<DiceRollerScreen>
+    with SingleTickerProviderStateMixin {
   final math.Random _rng = math.Random.secure();
   int _setA_count = 1;
   int _setA_sides = 6;
@@ -151,305 +243,440 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
   bool _rolling = false;
   bool _dualMode = false;
 
-  // Results for each set
   List<int> _resultsA = [];
   List<int> _resultsB = [];
 
+  // Animation for roll button
+  late AnimationController _pulseCtrl;
+  late Animation<double> _pulseAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat(reverse: true);
+    _pulseAnim = CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut);
+  }
+
+  @override
+  void dispose() {
+    _pulseCtrl.dispose();
+    super.dispose();
+  }
+
   void _roll() {
     setState(() => _rolling = true);
-    Vibration.vibrate(duration: 100);
+    Vibration.vibrate(duration: 50);
 
-    // Generate all results upfront
-    _resultsA = List.generate(_setA_count, (_) => _rng.nextInt(_setA_sides) + 1);
+    _resultsA = List.generate(
+      _setA_count,
+      (_) => _rng.nextInt(_setA_sides) + 1,
+    );
     if (_dualMode) {
-      _resultsB = List.generate(_setB_count, (_) => _rng.nextInt(_setB_sides) + 1);
+      _resultsB = List.generate(
+        _setB_count,
+        (_) => _rng.nextInt(_setB_sides) + 1,
+      );
     }
 
-    // Duration scales with total dice count for satisfying roll
     final totalDice = _setA_count + (_dualMode ? _setB_count : 0);
-    final duration = (100 + totalDice * 30).clamp(200, 800);
+    final duration = (200 + totalDice * 40).clamp(500, 1200);
 
     Future.delayed(Duration(milliseconds: duration), () {
       if (!mounted) return;
       setState(() => _rolling = false);
+      Vibration.vibrate(duration: 30);
     });
   }
 
-  Widget _modeChip(String label, bool isDual) {
-    final active = _dualMode == isDual;
-    return Material(
-      color: active
-          ? FlamingoColors.primary.withValues(alpha: 0.2)
-          : FlamingoColors.card,
-      surfaceTintColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: () => setState(() => _dualMode = isDual),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: active ? FlamingoColors.primary : FlamingoColors.muted,
-              fontSize: 12,
-              fontWeight: active ? FontWeight.w600 : FontWeight.normal,
-              letterSpacing: 1,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _diceSet({
-    required String label,
-    required bool active,
-  }) {
-    final count = label == 'A' ? _setA_count : _setB_count;
-    final sides = label == 'A' ? _setA_sides : _setB_sides;
-    final results = label == 'A' ? _resultsA : _resultsB;
-
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: active
-              ? FlamingoColors.primary.withValues(alpha: 0.08)
-              : FlamingoColors.card,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: active
-                ? FlamingoColors.primary.withValues(alpha: 0.3)
-                : FlamingoColors.primary.withValues(alpha: 0.1),
-            width: 1,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text('SET $label',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: active ? FlamingoColors.primary : FlamingoColors.muted,
-                  fontSize: 11,
-                  letterSpacing: 3,
-                  fontWeight: FontWeight.w600,
-                )),
-            const SizedBox(height: 4),
-            Text('d$sides · ${count == 1 ? "1 die" : "$count dice"}',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: FlamingoColors.muted,
-                  fontSize: 11,
-                )),
-            const SizedBox(height: 8),
-            // Dice display
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 4,
-              runSpacing: 4,
-              children: results.isEmpty
-                  ? [Text('—', style: TextStyle(color: FlamingoColors.muted))]
-                  : List.generate(results.length, (i) {
-                      return _AnimatedDie(
-                        sides: sides,
-                        result: results[i],
-                        rolling: _rolling,
-                        size: 52,
-                      );
-                    }),
-            ),
-            // Total line
-            if (results.isNotEmpty && !_rolling)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  'Total: ${results.fold<int>(0, (a, b) => a + b)}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: FlamingoColors.accent,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'monospace',
-                  ),
-                ),
-              ),
-            const SizedBox(height: 8),
-            // Sides selector
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 3,
-              runSpacing: 3,
-              children: _allSides.map((s) {
-                final isActive = (label == 'A' ? _setA_sides : _setB_sides) == s;
-                return Material(
-                  color: isActive
-                      ? FlamingoColors.accent.withValues(alpha: 0.2)
-                      : FlamingoColors.card,
-                  borderRadius: BorderRadius.circular(20),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () {
-                      setState(() {
-                        if (label == 'A') {
-                          _setA_sides = s;
-                        } else {
-                          _setB_sides = s;
-                        }
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      child: Text('d$s',
-                          style: TextStyle(
-                            color: isActive ? FlamingoColors.accent : FlamingoColors.muted,
-                            fontSize: 11,
-                            fontFamily: 'monospace',
-                          )),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 8),
-            // Count selector — quick chips
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 4,
-              runSpacing: 4,
-              children: List.generate(6, (i) {
-                final c = i + 1;
-                final isActive = (label == 'A' ? _setA_count : _setB_count) == c;
-                return Material(
-                  color: isActive
-                      ? FlamingoColors.primary.withValues(alpha: 0.2)
-                      : FlamingoColors.card,
-                  borderRadius: BorderRadius.circular(20),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () {
-                      setState(() {
-                        if (label == 'A') {
-                          _setA_count = c;
-                        } else {
-                          _setB_count = c;
-                        }
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      child: Text(
-                        '×$c',
-                        style: TextStyle(
-                          color: isActive ? FlamingoColors.primary : FlamingoColors.muted,
-                          fontSize: 11,
-                          fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-                          fontFamily: 'monospace',
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ],
-        ),
-      ),
-    );
+  void _rollAgain() {
+    if (_rolling) return;
+    _roll();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: FlamingoColors.scaffoldBg,
+      backgroundColor: cs.surface,
       appBar: AppBar(
-        backgroundColor: FlamingoColors.scaffoldBg,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('DICE ROLLER',
-            style: TextStyle(
-                color: FlamingoColors.muted, fontSize: 12, letterSpacing: 4)),
+        title: Text(
+          'DICE ROLLER',
+          style: TextStyle(
+            color: cs.onSurfaceVariant,
+            fontSize: 12,
+            letterSpacing: 4,
+          ),
+        ),
         centerTitle: true,
       ),
       body: CrtBackground(
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              // Mode toggle + dice sets
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
+        child: AnimatedBackground(
+          particleCount: 4,
+          colors: [cs.primary, cs.tertiary],
+          child: SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 8),
+                // Mode toggle
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Mode toggle chip
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _modeChip('Single', false),
-                        const SizedBox(width: 8),
-                        _modeChip('Dual', true),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    // Dice sets
-                    Row(
+                    _modeChip(cs, 'Single', false),
+                    const SizedBox(width: 8),
+                    _modeChip(cs, 'Dual', true),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                // Dice sets
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: _diceSet(label: 'A', active: !_rolling),
+                          child: _diceSet(
+                            cs,
+                            'A',
+                            _setA_count,
+                            _setA_sides,
+                            _resultsA,
+                            (c) => _setA_count = c,
+                            (s) => _setA_sides = s,
+                          ),
                         ),
                         if (_dualMode) ...[
                           const SizedBox(width: 8),
                           Expanded(
-                            child: _diceSet(label: 'B', active: !_rolling),
+                            child: _diceSet(
+                              cs,
+                              'B',
+                              _setB_count,
+                              _setB_sides,
+                              _resultsB,
+                              (c) => _setB_count = c,
+                              (s) => _setB_sides = s,
+                            ),
                           ),
                         ],
                       ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Summary line
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  _rolling
-                      ? 'ROLLING...'
-                      : (_dualMode ? 'Tap ROLL' : 'Tap to roll'),
-                  style: TextStyle(
-                    color: FlamingoColors.muted,
-                    fontSize: 11,
-                    letterSpacing: 1,
                   ),
                 ),
-              ),
-              const Spacer(),
-              Material(
-                color: FlamingoColors.primary.withValues(alpha: 0.15),
-                surfaceTintColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(28),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(28),
-                  onTap: _rolling ? null : _roll,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 56, vertical: 16),
-                    child: Text(
-                      _rolling ? 'ROLLING' : 'ROLL',
-                      style: TextStyle(
-                        color: _rolling ? FlamingoColors.muted : FlamingoColors.primary,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 3,
+
+                const SizedBox(height: 12),
+
+                // Animated Roll button
+                AnimatedBuilder(
+                  animation: _pulseAnim,
+                  builder: (context, child) {
+                    final pulse = _pulseAnim.value;
+                    return GestureDetector(
+                      onTap: _rolling ? null : _rollAgain,
+                      child: Container(
+                        width: 200,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              cs.primary,
+                              cs.primary.withValues(alpha: 0.7),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [
+                            BoxShadow(
+                              color: cs.primary.withValues(
+                                alpha: _rolling ? 0.2 : 0.3 + 0.2 * pulse,
+                              ),
+                              blurRadius: _rolling ? 12 : 16 + 8 * pulse,
+                              spreadRadius: _rolling ? 2 : 2 + 2 * pulse,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (_rolling)
+                              const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            else
+                              const Icon(
+                                Icons.casino,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            const SizedBox(width: 10),
+                            Text(
+                              _rolling ? 'ROLLING...' : 'ROLL DICE',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+
+                // Quick tap to roll hint
+                if (!_rolling && (_resultsA.isNotEmpty || _resultsB.isNotEmpty))
+                  GestureDetector(
+                    onTap: _rollAgain,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Text(
+                        'Tap to roll again',
+                        style: TextStyle(
+                          color: cs.onSurfaceVariant.withValues(alpha: 0.5),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  const SizedBox(height: 32),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _modeChip(ColorScheme cs, String label, bool isDual) {
+    final active = _dualMode == isDual;
+    return GestureDetector(
+      onTap: () => setState(() => _dualMode = isDual),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          gradient: active
+              ? LinearGradient(
+                  colors: [
+                    cs.primary.withValues(alpha: 0.2),
+                    cs.primary.withValues(alpha: 0.05),
+                  ],
+                )
+              : null,
+          color: active ? null : cs.surfaceContainerHigh.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: active
+                ? cs.primary.withValues(alpha: 0.4)
+                : cs.outlineVariant.withValues(alpha: 0.2),
+            width: 1,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: active ? cs.primary : cs.onSurfaceVariant,
+            fontSize: 13,
+            fontWeight: active ? FontWeight.w700 : FontWeight.normal,
+            letterSpacing: 1,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _diceSet(
+    ColorScheme cs,
+    String label,
+    int count,
+    int sides,
+    List<int> results,
+    ValueChanged<int> onCountChanged,
+    ValueChanged<int> onSidesChanged,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: cs.surfaceContainerHigh.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: cs.primary.withValues(alpha: 0.1), width: 1),
+      ),
+      child: Column(
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: cs.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'SET $label',
+              style: TextStyle(
+                color: cs.primary,
+                fontSize: 11,
+                letterSpacing: 3,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'd$sides · $count ${count == 1 ? "die" : "dice"}',
+            style: TextStyle(color: cs.onSurfaceVariant, fontSize: 11),
+          ),
+          const SizedBox(height: 10),
+
+          // Dice display
+          Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 2,
+                  runSpacing: 2,
+                  children: results.isEmpty
+                      ? [
+                          Icon(
+                            Icons.casino_outlined,
+                            size: 36,
+                            color: cs.onSurfaceVariant.withValues(alpha: 0.3),
+                          ),
+                        ]
+                      : List.generate(results.length, (i) {
+                          return _AnimatedDie(
+                            sides: sides,
+                            result: results[i],
+                            rolling: _rolling,
+                            size: 56,
+                          );
+                        }),
+                ),
+              ),
+            ),
+          ),
+
+          // Total
+          if (results.isNotEmpty && !_rolling)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: cs.tertiary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                'Total: ${results.fold<int>(0, (a, b) => a + b)}',
+                style: TextStyle(
+                  color: cs.tertiary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'monospace',
+                ),
+              ),
+            ),
+
+          const SizedBox(height: 8),
+
+          // Sides selector
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 3,
+            runSpacing: 3,
+            children: _allSides.map((s) {
+              final isActive = sides == s;
+              return GestureDetector(
+                onTap: () => onSidesChanged(s),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? cs.tertiary.withValues(alpha: 0.15)
+                        : cs.surfaceContainerLow.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isActive
+                          ? cs.tertiary.withValues(alpha: 0.3)
+                          : cs.outlineVariant.withValues(alpha: 0.1),
+                    ),
+                  ),
+                  child: Text(
+                    'd$s',
+                    style: TextStyle(
+                      color: isActive ? cs.tertiary : cs.onSurfaceVariant,
+                      fontSize: 11,
+                      fontWeight: isActive
+                          ? FontWeight.w700
+                          : FontWeight.normal,
+                      fontFamily: 'monospace',
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-            ],
+              );
+            }).toList(),
           ),
-        ),
+
+          const SizedBox(height: 6),
+
+          // Count selector
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 4,
+            runSpacing: 4,
+            children: List.generate(6, (i) {
+              final c = i + 1;
+              final isActive = count == c;
+              return GestureDetector(
+                onTap: () => onCountChanged(c),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? cs.primary.withValues(alpha: 0.15)
+                        : cs.surfaceContainerLow.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isActive
+                          ? cs.primary.withValues(alpha: 0.3)
+                          : cs.outlineVariant.withValues(alpha: 0.1),
+                    ),
+                  ),
+                  child: Text(
+                    '\u00d7$c',
+                    style: TextStyle(
+                      color: isActive ? cs.primary : cs.onSurfaceVariant,
+                      fontSize: 11,
+                      fontWeight: isActive
+                          ? FontWeight.w700
+                          : FontWeight.normal,
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ],
       ),
     );
   }

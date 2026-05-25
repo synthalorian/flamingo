@@ -45,17 +45,17 @@ class AppTheme {
   // ── Theme 0: Dark Synthwave ────────────────────────────────────────────────
   static final ThemeData _darkSynthwave = _buildTheme(
     brightness: Brightness.dark,
-    primaryColor: const Color(0xFFFF69B4),     // hot pink
-    secondaryColor: const Color(0xFF00D4FF),     // cyan
-    tertiaryColor: const Color(0xFFFFD700),      // gold
-    surfaceColor: const Color(0xFF0A0012),       // deep dark purple
+    primaryColor: const Color(0xFFFF69B4), // hot pink
+    secondaryColor: const Color(0xFF00D4FF), // cyan
+    tertiaryColor: const Color(0xFFFFD700), // gold
+    surfaceColor: const Color(0xFF0A0012), // deep dark purple
     surfaceContainerLow: const Color(0xFF1A0A2E),
     surfaceContainerHigh: const Color(0xFF2D1B4D),
-    onSurfaceColor: const Color(0xFFF0E6FF),     // light lavender text
-    onSurfaceVariant: const Color(0xFF9B8ABF),    // muted lavender
-    outlineVariant: const Color(0xFF4A2080),      // border purple
-    primaryContainer: const Color(0xFFFFB6C1),    // light pink
-    onPrimaryContainer: const Color(0xFFC71585),  // deep pink
+    onSurfaceColor: const Color(0xFFF0E6FF), // light lavender text
+    onSurfaceVariant: const Color(0xFF9B8ABF), // muted lavender
+    outlineVariant: const Color(0xFF4A2080), // border purple
+    primaryContainer: const Color(0xFFFFB6C1), // light pink
+    onPrimaryContainer: const Color(0xFFC71585), // deep pink
     scaffoldBg: const Color(0xFF0A0012),
     cardBg: const Color(0xFF2D1B4D),
     glowPink: const Color(0xFFFF69B4),
@@ -65,17 +65,17 @@ class AppTheme {
   // ── Theme 1: Light Clean ───────────────────────────────────────────────────
   static final ThemeData _lightClean = _buildTheme(
     brightness: Brightness.light,
-    primaryColor: const Color(0xFFD81B60),       // pink
-    secondaryColor: const Color(0xFF0288D1),      // blue
-    tertiaryColor: const Color(0xFFFF8F00),       // amber
-    surfaceColor: const Color(0xFFF5F0FA),        // very light purple tint
+    primaryColor: const Color(0xFFD81B60), // pink
+    secondaryColor: const Color(0xFF0288D1), // blue
+    tertiaryColor: const Color(0xFFFF8F00), // amber
+    surfaceColor: const Color(0xFFF5F0FA), // very light purple tint
     surfaceContainerLow: const Color(0xFFFFFFFF),
     surfaceContainerHigh: const Color(0xFFEDE7F6),
-    onSurfaceColor: const Color(0xFF1C1B1F),      // near black
-    onSurfaceVariant: const Color(0xFF6B657A),     // muted grey
-    outlineVariant: const Color(0xFFCAC4D0),       // light border
-    primaryContainer: const Color(0xFFFFD9E6),     // very light pink
-    onPrimaryContainer: const Color(0xFF8C0032),   // dark pink
+    onSurfaceColor: const Color(0xFF1C1B1F), // near black
+    onSurfaceVariant: const Color(0xFF6B657A), // muted grey
+    outlineVariant: const Color(0xFFCAC4D0), // light border
+    primaryContainer: const Color(0xFFFFD9E6), // very light pink
+    onPrimaryContainer: const Color(0xFF8C0032), // dark pink
     scaffoldBg: const Color(0xFFF5F0FA),
     cardBg: const Color(0xFFFFFFFF),
     glowPink: const Color(0xFFD81B60),
@@ -85,15 +85,15 @@ class AppTheme {
   // ── Theme 2: Standard Flamingo ─────────────────────────────────────────────
   static final ThemeData _flamingo = _buildTheme(
     brightness: Brightness.dark,
-    primaryColor: const Color(0xFFFF69B4),       // bright hot pink
-    secondaryColor: const Color(0xFFFF1493),      // deep pink
-    tertiaryColor: const Color(0xFFFFB6C1),       // light pink
-    surfaceColor: const Color(0xFF1A0008),        // dark rose
+    primaryColor: const Color(0xFFFF69B4), // bright hot pink
+    secondaryColor: const Color(0xFFFF1493), // deep pink
+    tertiaryColor: const Color(0xFFFFB6C1), // light pink
+    surfaceColor: const Color(0xFF1A0008), // dark rose
     surfaceContainerLow: const Color(0xFF2C0012),
     surfaceContainerHigh: const Color(0xFF3D0020),
-    onSurfaceColor: const Color(0xFFFFF0F5),      // lavender blush
-    onSurfaceVariant: const Color(0xFFCC99AA),     // muted rose
-    outlineVariant: const Color(0xFF5C0030),       // deep rose border
+    onSurfaceColor: const Color(0xFFFFF0F5), // lavender blush
+    onSurfaceVariant: const Color(0xFFCC99AA), // muted rose
+    outlineVariant: const Color(0xFF5C0030), // deep rose border
     primaryContainer: const Color(0xFFFFB6C1),
     onPrimaryContainer: const Color(0xFFC71585),
     scaffoldBg: const Color(0xFF1A0008),
@@ -108,17 +108,19 @@ class AppTheme {
   // waybar: bg=#0d0221, fg=#ffff66, surface=#240037, primary=#8f00ff
   static final ThemeData _synthwave84 = _buildTheme(
     brightness: Brightness.dark,
-    primaryColor: const Color(0xFF8F00FF),       // vivid purple
-    secondaryColor: const Color(0xFF03EDF9),      // neon cyan
-    tertiaryColor: const Color(0xFFFF69B4),       // hot pink
-    surfaceColor: const Color(0xFF0D0221),        // deep purple black
+    primaryColor: const Color(0xFF8F00FF), // vivid purple
+    secondaryColor: const Color(0xFF03EDF9), // neon cyan
+    tertiaryColor: const Color(0xFFFF69B4), // hot pink
+    surfaceColor: const Color(0xFF0D0221), // deep purple black
     surfaceContainerLow: const Color(0xFF240037), // deep purple (alacritty bg)
-    surfaceContainerHigh: const Color(0xFF3A0057), // lighter deep purple (cards)
-    onSurfaceColor: const Color(0xFFFFFFFF),      // white text
-    onSurfaceVariant: const Color(0xFFC8B060),    // muted gold/yellow accent
-    outlineVariant: const Color(0xFF4A0070),       // purple border
-    primaryContainer: const Color(0xFFB060FF),    // light purple
-    onPrimaryContainer: const Color(0xFF0D0221),   // dark
+    surfaceContainerHigh: const Color(
+      0xFF3A0057,
+    ), // lighter deep purple (cards)
+    onSurfaceColor: const Color(0xFFFFFFFF), // white text
+    onSurfaceVariant: const Color(0xFFC8B060), // muted gold/yellow accent
+    outlineVariant: const Color(0xFF4A0070), // purple border
+    primaryContainer: const Color(0xFFB060FF), // light purple
+    onPrimaryContainer: const Color(0xFF0D0221), // dark
     scaffoldBg: const Color(0xFF0D0221),
     cardBg: const Color(0xFF3A0057),
     glowPink: const Color(0xFFFF69B4),
@@ -192,7 +194,9 @@ class AppTheme {
           color: onSurfaceColor,
           fontFamily: 'Roboto',
         ),
-        systemOverlayStyle: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        systemOverlayStyle: isDark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
       ),
       cardTheme: CardThemeData(
         color: cardBg,
@@ -216,16 +220,66 @@ class AppTheme {
         elevation: 0,
       ),
       textTheme: TextTheme(
-        displayLarge: TextStyle(fontSize: 57, fontWeight: FontWeight.w400, color: onSurfaceColor, fontFamily: 'Roboto'),
-        displayMedium: TextStyle(fontSize: 45, fontWeight: FontWeight.w400, color: onSurfaceColor, fontFamily: 'Roboto'),
-        displaySmall: TextStyle(fontSize: 36, fontWeight: FontWeight.w400, color: onSurfaceColor, fontFamily: 'Roboto'),
-        headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w400, color: onSurfaceColor, fontFamily: 'Roboto'),
-        headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: onSurfaceColor, fontFamily: 'Roboto'),
-        titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: onSurfaceColor, fontFamily: 'Roboto'),
-        titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: onSurfaceColor, fontFamily: 'Roboto'),
-        bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: onSurfaceColor, fontFamily: 'Roboto'),
-        bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: onSurfaceVariant, fontFamily: 'Roboto'),
-        bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: onSurfaceVariant, fontFamily: 'Roboto'),
+        displayLarge: TextStyle(
+          fontSize: 57,
+          fontWeight: FontWeight.w400,
+          color: onSurfaceColor,
+          fontFamily: 'Roboto',
+        ),
+        displayMedium: TextStyle(
+          fontSize: 45,
+          fontWeight: FontWeight.w400,
+          color: onSurfaceColor,
+          fontFamily: 'Roboto',
+        ),
+        displaySmall: TextStyle(
+          fontSize: 36,
+          fontWeight: FontWeight.w400,
+          color: onSurfaceColor,
+          fontFamily: 'Roboto',
+        ),
+        headlineMedium: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.w400,
+          color: onSurfaceColor,
+          fontFamily: 'Roboto',
+        ),
+        headlineSmall: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: onSurfaceColor,
+          fontFamily: 'Roboto',
+        ),
+        titleLarge: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+          color: onSurfaceColor,
+          fontFamily: 'Roboto',
+        ),
+        titleMedium: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: onSurfaceColor,
+          fontFamily: 'Roboto',
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: onSurfaceColor,
+          fontFamily: 'Roboto',
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: onSurfaceVariant,
+          fontFamily: 'Roboto',
+        ),
+        bodySmall: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: onSurfaceVariant,
+          fontFamily: 'Roboto',
+        ),
       ),
       iconTheme: IconThemeData(color: primaryColor, size: 24),
       filledButtonTheme: FilledButtonThemeData(
@@ -233,14 +287,18 @@ class AppTheme {
           backgroundColor: primaryColor,
           foregroundColor: isDark ? surfaceColor : Colors.white,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: primaryColor,
           side: BorderSide(color: primaryColor, width: 1.5),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -270,12 +328,16 @@ class AppTheme {
         valueIndicatorTextStyle: TextStyle(color: onSurfaceColor),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateColor.resolveWith((states) =>
-            states.contains(WidgetState.selected) ? primaryColor : onSurfaceVariant),
-        trackColor: WidgetStateColor.resolveWith((states) =>
-            states.contains(WidgetState.selected)
-                ? primaryColor.withValues(alpha: 0.5)
-                : surfaceContainerHigh),
+        thumbColor: WidgetStateColor.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? primaryColor
+              : onSurfaceVariant,
+        ),
+        trackColor: WidgetStateColor.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? primaryColor.withValues(alpha: 0.5)
+              : surfaceContainerHigh,
+        ),
       ),
       dividerTheme: DividerThemeData(
         color: outlineVariant.withValues(alpha: 0.5),
