@@ -2,7 +2,7 @@ name: flamingo
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.3.0+3
+version: 1.4.0+1
 
 environment:
   sdk: ^3.11.5
@@ -24,6 +24,10 @@ dependencies:
   audioplayers: ^6.6.0
   battery_plus: ^6.2.0
   record: ^6.2.1
+  http: ^1.6.0
+  geolocator: ^14.0.1
+  intl: ^0.20.2
+  geocoding: ^4.0.0
 
 dev_dependencies:
   flutter_test:
