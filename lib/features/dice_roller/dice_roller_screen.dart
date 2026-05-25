@@ -149,6 +149,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
   int _setB_count = 2;
   int _setB_sides = 6;
   bool _rolling = false;
+  bool _dualMode = true;
 
   // Results for each set
   List<int> _resultsA = [];
@@ -160,15 +161,45 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
 
     // Generate all results upfront
     _resultsA = List.generate(_setA_count, (_) => _rng.nextInt(_setA_sides) + 1);
-    _resultsB = List.generate(_setB_count, (_) => _rng.nextInt(_setB_sides) + 1);
+    if (_dualMode) {
+      _resultsB = List.generate(_setB_count, (_) => _rng.nextInt(_setB_sides) + 1);
+    }
 
     // Duration scales with total dice count for satisfying roll
-    final duration = (100 + _setA_count * 30 + _setB_count * 30).clamp(200, 800);
+    final totalDice = _setA_count + (_dualMode ? _setB_count : 0);
+    final duration = (100 + totalDice * 30).clamp(200, 800);
 
     Future.delayed(Duration(milliseconds: duration), () {
       if (!mounted) return;
       setState(() => _rolling = false);
     });
+  }
+
+  Widget _modeChip(String label, bool isDual) {
+    final active = _dualMode == isDual;
+    return Material(
+      color: active
+          ? FlamingoColors.primary.withValues(alpha: 0.2)
+          : FlamingoColors.card,
+      surfaceTintColor: Colors.transparent,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () => setState(() => _dualMode = isDual),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: active ? FlamingoColors.primary : FlamingoColors.muted,
+              fontSize: 12,
+              fontWeight: active ? FontWeight.w600 : FontWeight.normal,
+              letterSpacing: 1,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _diceSet({
@@ -323,14 +354,36 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
           child: Column(
             children: [
               const SizedBox(height: 8),
-              // Two dice sets side-by-side
+              // Mode toggle + dice sets
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
+                child: Column(
                   children: [
-                    _diceSet(label: 'A', active: !_rolling),
-                    const SizedBox(width: 8),
-                    _diceSet(label: 'B', active: !_rolling),
+                    // Mode toggle chip
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _modeChip('Single', false),
+                        const SizedBox(width: 8),
+                        _modeChip('Dual', true),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    // Dice sets
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: _diceSet(label: 'A', active: !_rolling),
+                        ),
+                        if (_dualMode) ...[
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: _diceSet(label: 'B', active: !_rolling),
+                          ),
+                        ],
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -341,7 +394,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
                 child: Text(
                   _rolling
                       ? 'ROLLING...'
-                      : 'Tap ROLL (+equal sides plays both)',
+                      : (_dualMode ? 'Tap ROLL' : 'Tap to roll'),
                   style: TextStyle(
                     color: FlamingoColors.muted,
                     fontSize: 11,
@@ -356,23 +409,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
                 borderRadius: BorderRadius.circular(28),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(28),
-                  onTap: _rolling
-                      ? null
-                      : () {
-                          if (_setA_sides == _setB_sides) {
-                            _roll();
-                          } else {
-                            setState(() => _rolling = true);
-                            Vibration.vibrate(duration: 100);
-                            _resultsA = List.generate(_setA_count, (_) => _rng.nextInt(_setA_sides) + 1);
-                            _resultsB = List.generate(_setB_count, (_) => _rng.nextInt(_setB_sides) + 1);
-                            final duration = (100 + _setA_count * 30 + _setB_count * 30).clamp(200, 800);
-                            Future.delayed(Duration(milliseconds: duration), () {
-                              if (!mounted) return;
-                              setState(() => _rolling = false);
-                            });
-                          }
-                        },
+                  onTap: _rolling ? null : _roll,
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 56, vertical: 16),
