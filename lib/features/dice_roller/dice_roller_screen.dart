@@ -218,7 +218,7 @@ class _DiceRollerScreenState extends State<DiceRollerScreen> {
               alignment: WrapAlignment.center,
               spacing: 4,
               runSpacing: 4,
-              children: results.isEmpty || _rolling
+              children: results.isEmpty
                   ? [Text('—', style: TextStyle(color: FlamingoColors.muted))]
                   : List.generate(results.length, (i) {
                       return _AnimatedDie(
