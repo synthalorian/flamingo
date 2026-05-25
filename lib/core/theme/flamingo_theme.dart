@@ -103,23 +103,26 @@ class AppTheme {
   );
 
   // ── Theme 3: Synthwave '84 ─────────────────────────────────────────────────
+  // Matches Omarchy synthwave84 theme: vivid purple primary, deep purple surfaces,
+  // yellow + hot pink accents, neon cyan secondary.
+  // waybar: bg=#0d0221, fg=#ffff66, surface=#240037, primary=#8f00ff
   static final ThemeData _synthwave84 = _buildTheme(
     brightness: Brightness.dark,
-    primaryColor: const Color(0xFF00D4FF),       // neon cyan
-    secondaryColor: const Color(0xFFB026FF),      // deep purple
-    tertiaryColor: const Color(0xFFFF69B4),       // hot pink accent
+    primaryColor: const Color(0xFF8F00FF),       // vivid purple
+    secondaryColor: const Color(0xFF03EDF9),      // neon cyan
+    tertiaryColor: const Color(0xFFFF69B4),       // hot pink
     surfaceColor: const Color(0xFF0D0221),        // deep purple black
-    surfaceContainerLow: const Color(0xFF1A0533),
-    surfaceContainerHigh: const Color(0xFF2D0A4D),
-    onSurfaceColor: const Color(0xFFE0D0FF),      // light purple text
-    onSurfaceVariant: const Color(0xFF9B7EC0),     // muted purple
-    outlineVariant: const Color(0xFF4A1A80),       // border purple
-    primaryContainer: const Color(0xFF80E5FF),     // light cyan
-    onPrimaryContainer: const Color(0xFF006080),   // dark cyan
+    surfaceContainerLow: const Color(0xFF240037), // deep purple (alacritty bg)
+    surfaceContainerHigh: const Color(0xFF3A0057), // lighter deep purple (cards)
+    onSurfaceColor: const Color(0xFFFFFFFF),      // white text
+    onSurfaceVariant: const Color(0xFFC8B060),    // muted gold/yellow accent
+    outlineVariant: const Color(0xFF4A0070),       // purple border
+    primaryContainer: const Color(0xFFB060FF),    // light purple
+    onPrimaryContainer: const Color(0xFF0D0221),   // dark
     scaffoldBg: const Color(0xFF0D0221),
-    cardBg: const Color(0xFF2D0A4D),
+    cardBg: const Color(0xFF3A0057),
     glowPink: const Color(0xFFFF69B4),
-    glowCyan: const Color(0xFF00D4FF),
+    glowCyan: const Color(0xFF03EDF9),
   );
 
   // ── Theme builder ───────────────────────────────────────────────────────────

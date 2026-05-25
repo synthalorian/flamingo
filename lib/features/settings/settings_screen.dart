@@ -183,22 +183,12 @@ class _ThemeCard extends StatelessWidget {
     );
   }
 
-  Color _previewBg(int i) {
-    switch (i) {
-      case 0: return const Color(0xFF0A0012);
-      case 1: return const Color(0xFFF5F0FA);
-      case 2: return const Color(0xFF1A0008);
-      case 3: return const Color(0xFF0D0221);
-      default: return const Color(0xFF0A0012);
-    }
-  }
-
   Color _previewPrimary(int i) {
     switch (i) {
       case 0: return const Color(0xFFFF69B4);
       case 1: return const Color(0xFFD81B60);
       case 2: return const Color(0xFFFF69B4);
-      case 3: return const Color(0xFF00D4FF);
+      case 3: return const Color(0xFF8F00FF);
       default: return const Color(0xFFFF69B4);
     }
   }
@@ -208,8 +198,18 @@ class _ThemeCard extends StatelessWidget {
       case 0: return const Color(0xFF00D4FF);
       case 1: return const Color(0xFF0288D1);
       case 2: return const Color(0xFFFF1493);
-      case 3: return const Color(0xFFB026FF);
+      case 3: return const Color(0xFF03EDF9);
       default: return const Color(0xFF00D4FF);
+    }
+  }
+
+  Color _previewBg(int i) {
+    switch (i) {
+      case 0: return const Color(0xFF0A0012);
+      case 1: return const Color(0xFFF5F0FA);
+      case 2: return const Color(0xFF1A0008);
+      case 3: return const Color(0xFF240037);
+      default: return const Color(0xFF0A0012);
     }
   }
 }
