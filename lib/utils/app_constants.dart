@@ -162,6 +162,33 @@ class AppConstants {
       icon: Icons.search,
       accentColor: const Color(0xFF00D4FF),
     ),
+    // ── Tier 4 – New: Breathing Exercise ───────────────────────────
+    ToolItem(
+      id: 'breathing',
+      title: 'Breathing',
+      description: 'Guided breathing exercise',
+      routePath: '/tool/breathing',
+      icon: Icons.self_improvement,
+      accentColor: const Color(0xFF7CB342),
+    ),
+    // ── Tier 4 – New: Step Counter ──────────────────────────────────
+    ToolItem(
+      id: 'stepCounter',
+      title: 'Step Counter',
+      description: 'Track your daily steps',
+      routePath: '/tool/stepCounter',
+      icon: Icons.directions_walk,
+      accentColor: const Color(0xFFFF7043),
+    ),
+    // ── Tier 4 – New: Pomodoro ──────────────────────────────────────
+    ToolItem(
+      id: 'pomodoro',
+      title: 'Pomodoro',
+      description: 'Focus timer with breaks',
+      routePath: '/tool/pomodoro',
+      icon: Icons.timer_rounded,
+      accentColor: const Color(0xFFE53935),
+    ),
   ];
 
   /// Icon data for each tool id (used by home screen).
@@ -203,6 +230,12 @@ class AppConstants {
         return Icons.battery_charging_full;
       case 'magnifier':
         return Icons.search;
+      case 'breathing':
+        return Icons.self_improvement;
+      case 'stepCounter':
+        return Icons.directions_walk;
+      case 'pomodoro':
+        return Icons.timer_rounded;
       default:
         return Icons.apps;
     }
