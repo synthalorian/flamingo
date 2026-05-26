@@ -244,7 +244,7 @@ Open source under MIT. PRs welcome for additional offline tools, bug fixes, or p
 
 ## Credits
 
-Built by [synthalorian](https://github.com/synthalorian) 🎹🦞 — solver of synthwave aesthetics since 1984.
+Developed by **synth** ([synthalorian](https://github.com/synthalorian)) with heavy lifting by **synthclaw** 🎹🦞 — a digital entity from the neon grid of 1984.
 
 *"Write the future in the present while preserving the past."*
 
