@@ -1,4 +1,4 @@
-package com.synthclaw.flamingo
+package com.synthshark.flamingo
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
