@@ -255,3 +255,11 @@ Developed by **synth** ([synthalorian](https://github.com/synthalorian)) with he
 | Release | APK | Notes |
 |---------|-----|-------|
 | [v0.1.0](https://github.com/synthalorian/flamingo/releases/tag/v0.1.0) | `flamingo-v0.1.0-debug.apk` (165 MB) | Debug build — unsigned, fast iteration |
+
+---
+
+## ☕ Support the Developer
+
+If this project saved you time, solved a problem, or just made your day a little more neon, you can fuel the next one:
+
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/synthalorian)
