@@ -244,7 +244,7 @@ Open source under MIT. PRs welcome for additional offline tools, bug fixes, or p
 
 ## Credits
 
-Developed by **synth** ([synthalorian](https://github.com/synthalorian)) with heavy lifting by **synthshark** 🎹🦈 — a digital entity from the neon grid of 1984.
+Developed by **synth** with heavy lifting by **synthshark** 🎹🦈 — a digital entity from the neon grid of 1984.
 
 *"Write the future in the present while preserving the past."*
 
