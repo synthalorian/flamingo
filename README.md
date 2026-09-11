@@ -38,7 +38,7 @@ Every screen wears a consistent **synthwave CRT aesthetic** — hot-pink neon, c
 | 11 | 🎲 **Dice Roller** | 3 | — | Random dice with quantity and face selector |
 | 12 | 📝 **Notepad** | 3 | SharedPreferences | Quick text notes saved locally |
 | 13 | 🔑 **Password Gen** | 3 | Crypto RNG | Secure passwords with entropy meter and clipboard |
-| 14 | 🌡️ **Thermometer** | 3 | — | Animated analog dial with simulated temperature drift |
+| 14 | 🌡️ **Thermometer** | 3 | Battery sensor | Live device temperature via battery channel |
 | 15 | 📏 **Ruler** | 3 | — | Calibrated on-screen ruler (cm / in) |
 || 16 | 🔄 **Unit Converter** | 3 | — | Length, weight, temperature, volume with swap button |
 
@@ -105,7 +105,7 @@ flamingo/
 │   │   ├── dice_roller/
 │   │   ├── notepad/
 │   │   ├── password_gen/
-│   │   ├── thermometer/
+│   │   ├── battery_thermometer/
 │   │   ├── ruler/
 │   │   ├── unit_converter/
 │   │   └── tools/              # Generic tool shell (unused)

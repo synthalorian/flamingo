@@ -16,7 +16,6 @@ import '../../features/color_picker/color_picker_screen.dart';
 import '../../features/dice_roller/dice_roller_screen.dart';
 import '../../features/notepad/notepad_screen.dart';
 import '../../features/password_gen/password_gen_screen.dart';
-import '../../features/thermometer/thermometer_screen.dart';
 import '../../features/ruler/ruler_screen.dart';
 import '../../features/unit_converter/unit_converter_screen.dart';
 import '../../features/battery_thermometer/battery_thermometer_screen.dart';
@@ -86,8 +85,6 @@ class AppRouter {
                     return const NotePadScreen();
                   case 'passwordGen':
                     return const PasswordGenScreen();
-                  case 'thermometer':
-                    return const ThermometerScreen();
                   case 'ruler':
                     return const RulerScreen();
                   case 'unitConverter':

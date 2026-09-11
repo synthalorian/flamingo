@@ -122,14 +122,6 @@ class AppConstants {
     ),
     // ── Tier 2+ – new tools ───────────────────────────────────────
     ToolItem(
-      id: 'thermometer',
-      title: 'Thermometer',
-      description: 'Temperature readings',
-      routePath: '/tool/thermometer',
-      icon: Icons.thermostat,
-      accentColor: const Color(0xFFFFD700),
-    ),
-    ToolItem(
       id: 'ruler',
       title: 'Ruler',
       description: 'On-screen measure tool',
@@ -148,10 +140,10 @@ class AppConstants {
     // ── Tier 3 – new features ──────────────────────────────────────
     ToolItem(
       id: 'batteryThermometer',
-      title: 'Battery Thermometer',
-      description: 'Battery temperature reading',
+      title: 'Thermometer',
+      description: 'Device temperature (battery sensor)',
       routePath: '/tool/batteryThermometer',
-      icon: Icons.battery_charging_full,
+      icon: Icons.thermostat,
       accentColor: const Color(0xFFFFD700),
     ),
     ToolItem(
@@ -265,8 +257,6 @@ class AppConstants {
         return Icons.note_alt;
       case 'passwordGen':
         return Icons.vpn_key;
-      case 'thermometer':
-        return Icons.thermostat;
       case 'ruler':
         return Icons.straighten;
       case 'unitConverter':

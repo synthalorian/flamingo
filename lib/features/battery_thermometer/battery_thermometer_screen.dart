@@ -69,10 +69,10 @@ class _BatteryThermometerScreenState extends State<BatteryThermometerScreen> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.battery_charging_full, size: 16, color: cs.primary),
+            Icon(Icons.thermostat, size: 16, color: cs.primary),
             const SizedBox(width: 8),
             Text(
-              'BATTERY TEMP',
+              'THERMOMETER',
               style: TextStyle(
                 color: cs.onSurfaceVariant,
                 fontSize: 12,
