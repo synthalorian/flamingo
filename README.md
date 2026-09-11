@@ -31,7 +31,7 @@ Every screen wears a consistent **synthwave CRT aesthetic** — hot-pink neon, c
 | 4 | ⏲️ **Timer** | 1 | Haptics | Countdown timer with haptic completion |
 | 5 | 📐 **Level** | 1 | Accelerometer | Bubble level with low-pass filter and tolerance ring |
 | 6 | 🧭 **Compass** | 2 | Magnetometer | Digital heading with animated custom-painted dial |
-| 7 | 🎙️ **Sound Meter** | 2 | Microphone | Real-time dB readout with animated volume bar |
+| 7 | 🎙️ **Sound Meter** | 2 | Microphone | Real-time dB readout with waveform + VU bar |
 | 8 | 🥁 **Metronome** | 2 | Vibration | Tempo metronome with haptic ticks |
 | 9 | 📷 **QR Scanner** | 2 | Camera | Camera-based QR / barcode reader with copy & share |
 | 10 | 🎨 **Color Picker** | 2 | — | Tap-to-pick colour with hex / RGB / HSV display |

@@ -207,15 +207,6 @@ class AppConstants {
       icon: Icons.palette,
       accentColor: const Color(0xFFFF8A65),
     ),
-    // ── Tier 5 – New: Guitar Tuner ─────────────────────────────────────
-    ToolItem(
-      id: 'guitarTuner',
-      title: 'Guitar Tuner',
-      description: 'Guitar & bass chromatic tuner',
-      routePath: '/tool/guitarTuner',
-      icon: Icons.music_note_outlined,
-      accentColor: const Color(0xFFCE93D8),
-    ),
     // ── Tier 6 – New: Alarm Clock ───────────────────────────────────────
     ToolItem(
       id: 'alarmClock',
@@ -294,8 +285,6 @@ class AppConstants {
         return Icons.headphones;
       case 'drawingBoard':
         return Icons.palette;
-      case 'guitarTuner':
-        return Icons.music_note_outlined;
       case 'alarmClock':
         return Icons.alarm;
       case 'voiceRecorder':

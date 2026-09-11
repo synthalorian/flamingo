@@ -26,7 +26,6 @@ import '../../features/step_counter/step_counter_screen.dart';
 import '../../features/pomodoro/pomodoro_screen.dart';
 import '../../features/ambient_sounds/ambient_sounds_screen.dart';
 import '../../features/drawing_board/drawing_board_screen.dart';
-import '../../features/guitar_tuner/guitar_tuner_screen.dart';
 import '../../features/alarm_clock/alarm_clock_screen.dart';
 import '../../features/voice_recorder/voice_recorder_screen.dart';
 import '../../features/weather/weather_screen.dart';
@@ -107,8 +106,6 @@ class AppRouter {
                     return const AmbientSoundsScreen();
                   case 'drawingBoard':
                     return const DrawingBoardScreen();
-                  case 'guitarTuner':
-                    return const GuitarTunerScreen();
                   case 'alarmClock':
                     return const AlarmClockScreen();
                   case 'voiceRecorder':
