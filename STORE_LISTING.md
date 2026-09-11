@@ -16,6 +16,8 @@ converter, alarm clock, guitar tuner, voice recorder, magnifier, drawing
 board, pomodoro, step counter, breathing coach, ambient sounds, and more —
 all wrapped in a hot-pink synthwave CRT aesthetic.
 
+(Sound meter cut from copy 2026-09-10: screen says "Simulated · Mic recording not yet wired". Wire the mic or cut the tool before ship; re-add 🎙️ to Sensor tools when real.)
+
 **100% offline. 100% yours.**
 No accounts. No ads. No analytics. No API keys. No internet permission
 needed for a single tool. Every permission is used only on-device, only
@@ -27,7 +29,7 @@ while the tool is open.
 🌡️ Thermometer · 📏 On-screen ruler · 🔄 Unit converter
 
 **Sensor tools**
-📐 Bubble level · 🧭 Compass · 🎙️ Sound meter (live dB) · 📷 QR & barcode
+📐 Bubble level · 🧭 Compass · 📷 QR & barcode
 scanner · 🔍 Magnifier · 👣 Step counter
 
 **Musician & focus tools**
