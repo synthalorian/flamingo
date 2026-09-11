@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -350,8 +349,14 @@ class _DiceRollerScreenState extends State<DiceRollerScreen>
                             _setA_count,
                             _setA_sides,
                             _resultsA,
-                            (c) => _setA_count = c,
-                            (s) => _setA_sides = s,
+                            (c) => setState(() {
+                              _setA_count = c;
+                              _resultsA = [];
+                            }),
+                            (s) => setState(() {
+                              _setA_sides = s;
+                              _resultsA = [];
+                            }),
                           ),
                         ),
                         if (_dualMode) ...[
@@ -363,8 +368,14 @@ class _DiceRollerScreenState extends State<DiceRollerScreen>
                               _setB_count,
                               _setB_sides,
                               _resultsB,
-                              (c) => _setB_count = c,
-                              (s) => _setB_sides = s,
+                              (c) => setState(() {
+                                _setB_count = c;
+                                _resultsB = [];
+                              }),
+                              (s) => setState(() {
+                                _setB_sides = s;
+                                _resultsB = [];
+                              }),
                             ),
                           ),
                         ],
