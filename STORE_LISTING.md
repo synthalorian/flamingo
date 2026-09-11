@@ -12,11 +12,9 @@ One app. Thirty tools. Zero internet.
 Flamingo is a Swiss Army knife for your phone — flashlight, calculator,
 stopwatch, timer, level, compass, sound meter, metronome, QR scanner, color
 picker, dice, notepad, password generator, thermometer, ruler, unit
-converter, alarm clock, guitar tuner, voice recorder, magnifier, drawing
+converter, alarm clock, voice recorder, magnifier, drawing
 board, pomodoro, step counter, breathing coach, ambient sounds, and more —
 all wrapped in a hot-pink synthwave CRT aesthetic.
-
-(Sound meter cut from copy 2026-09-10: screen says "Simulated · Mic recording not yet wired". Wire the mic or cut the tool before ship; re-add 🎙️ to Sensor tools when real.)
 
 **100% offline. 100% yours.**
 No accounts. No ads. No analytics. No API keys. No internet permission
@@ -29,11 +27,11 @@ while the tool is open.
 🌡️ Thermometer · 📏 On-screen ruler · 🔄 Unit converter
 
 **Sensor tools**
-📐 Bubble level · 🧭 Compass · 📷 QR & barcode
+📐 Bubble level · 🧭 Compass · 🎙️ Sound meter (live dB) · 📷 QR & barcode
 scanner · 🔍 Magnifier · 👣 Step counter
 
 **Musician & focus tools**
-🎸 Guitar tuner · 🥁 Metronome with haptic ticks · 🍅 Pomodoro ·
+🥁 Metronome with haptic ticks · 🍅 Pomodoro ·
 🫁 Breathing exercises · 🌊 Ambient sounds · ⏰ Alarm clock
 
 **Made for the grid**
@@ -60,8 +58,8 @@ Tools
 
 ## Store assets
 - Icon: assets/app-icon-1024.png (resize to 512 for hi-res icon)
-- Screenshots: captured on-device (home grid, calculator, compass, tuner,
-  sound meter) — 1080x2400 portrait
+- Screenshots: captured on-device (home grid, calculator, compass,
+  sound meter, metronome) — 1080x2400 portrait
 - Feature graphic 1024x500: TODO (compose from app icon + wordmark,
   same generator pattern as blackshield store-assets)
 

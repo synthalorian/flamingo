@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
 
 import '../../core/widgets/crt_background.dart';
 import '../../core/widgets/animated_background.dart';
@@ -17,9 +19,13 @@ class _SoundMeterScreenState extends State<SoundMeterScreen>
     with SingleTickerProviderStateMixin {
   bool _recording = false;
   double _volume = 0;
-  Timer? _tick;
-  double _phase = 0;
+  double _dbSpl = 0;
+  final AudioRecorder _recorder = AudioRecorder();
+  StreamSubscription<Uint8List>? _audioSub;
   final List<double> _waveform = List.filled(40, 0);
+
+  // Full-scale mic input on phones ≈ 94 dB SPL (standard approximation).
+  static const double _dbSplOffset = 94.0;
 
   late AnimationController _glowCtrl;
   late Animation<double> _glowAnim;
@@ -41,44 +47,74 @@ class _SoundMeterScreenState extends State<SoundMeterScreen>
       return;
     }
 
-    _recording = true;
-    _phase = 0;
-    setState(() {});
-    _tick = Timer.periodic(const Duration(milliseconds: 60), (_) {
-      if (!_recording || !mounted) return;
-      _phase += 0.25;
-      final sine = math.sin(_phase) * 0.3;
-      final noise = (math.Random().nextDouble() - 0.5) * 0.5;
-      final ambient = 0.15 + math.sin(_phase * 0.08) * 0.1;
-      final val = (ambient + sine + noise).clamp(0.0, 1.0);
+    try {
+      final stream = await _recorder.startStream(
+        const RecordConfig(
+          encoder: AudioEncoder.pcm16bits,
+          sampleRate: 44100,
+          numChannels: 1,
+        ),
+      );
+      _audioSub = stream.listen(_onAudioData);
+      setState(() => _recording = true);
+    } catch (_) {
+      setState(() => _recording = false);
+    }
+  }
 
-      // Shift waveform buffer
-      for (int i = 0; i < _waveform.length - 1; i++) {
-        _waveform[i] = _waveform[i + 1];
-      }
-      _waveform[_waveform.length - 1] = val;
+  void _onAudioData(Uint8List data) {
+    if (!_recording || !mounted || data.length < 2) return;
 
-      setState(() => _volume = val);
+    // RMS of PCM16 little-endian samples.
+    final samples = data.buffer.asByteData();
+    var sum = 0.0;
+    final count = samples.lengthInBytes ~/ 2;
+    for (int i = 0; i < count; i++) {
+      final s = samples.getInt16(i * 2, Endian.little) / 32768.0;
+      sum += s * s;
+    }
+    final rms = math.sqrt(sum / count);
+
+    // dBFS -> approximate SPL, clamped to the 0..120 display range.
+    final dbfs = 20 * math.log(rms + 1e-9) / math.ln10;
+    final spl = (dbfs + _dbSplOffset).clamp(0.0, 120.0);
+
+    // Perceptual 0..1 level for VU/waveform, smoothed against jitter.
+    final level = (spl / 120.0).clamp(0.0, 1.0);
+    final smoothed = _volume * 0.6 + level * 0.4;
+
+    for (int i = 0; i < _waveform.length - 1; i++) {
+      _waveform[i] = _waveform[i + 1];
+    }
+    _waveform[_waveform.length - 1] = level;
+
+    setState(() {
+      _volume = smoothed;
+      _dbSpl = spl;
     });
   }
 
-  void _stopRecord() {
+  Future<void> _stopRecord() async {
     _recording = false;
-    _tick?.cancel();
+    await _audioSub?.cancel();
+    _audioSub = null;
+    await _recorder.stop();
     setState(() {
       _volume = 0;
+      _dbSpl = 0;
       _waveform.fillRange(0, _waveform.length, 0);
     });
   }
 
   @override
   void dispose() {
-    _tick?.cancel();
+    _audioSub?.cancel();
+    _recorder.dispose();
     _glowCtrl.dispose();
     super.dispose();
   }
 
-  double get _db => 20 * math.log(_volume * 0.001 + 0.001) / math.log(10) + 90;
+  double get _db => _dbSpl;
 
   String get _levelLabel {
     final db = _db;
@@ -323,7 +359,7 @@ class _SoundMeterScreenState extends State<SoundMeterScreen>
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'Simulated · Mic recording not yet wired',
+                      'Live mic · analyzed on-device only',
                       style: TextStyle(
                         color: cs.onSurfaceVariant.withValues(alpha: 0.6),
                         fontSize: 10,
