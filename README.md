@@ -1,3 +1,5 @@
+![flamingo](.github/preview.png)
+
 # 🎹🦈 Flamingo
 
 > **Swiss Army Knife** – 16 offline tools, one synthwave-pink Flutter app.
