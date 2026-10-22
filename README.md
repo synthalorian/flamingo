@@ -10,7 +10,7 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.41.9-blue.svg)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.11.5-blueviolet.svg)](https://dart.dev)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache--2.0-green.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-API%2021+-success.svg)](https://developer.android.com)
 
 ---
@@ -235,7 +235,7 @@ To verify: grep the repo for `http://`, `https://`, `socket`, or any external ho
 
 ## Contributing
 
-Open source under MIT. PRs welcome for additional offline tools, bug fixes, or pixel-art icon replacements.
+Open source under Apache-2.0, see [LICENSE](LICENSE). PRs welcome for additional offline tools, bug fixes, or pixel-art icon replacements.
 
 1. Fork `synthalorian/flamingo`
 2. Create a feature branch off `main`
